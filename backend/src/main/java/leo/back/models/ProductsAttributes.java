@@ -6,14 +6,16 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter
-public class Categories {
+public class ProductsAttributes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @JoinColumn(name = "parent_id")
+    private String value;
+
+    @JoinColumn(name = "product_id")
     @ManyToOne
-    private Categories parentCategory;
+    private Products product;
 }
