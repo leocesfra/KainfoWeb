@@ -2,13 +2,16 @@ package leo.back.services;
 
 import leo.back.models.Products;
 import leo.back.repositories.ProductRepository;
+import leo.back.specifications.ProductSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -29,5 +32,30 @@ public class ProductService {
         Page<Products> pageResult = productRepository.findAll(pageInstructions);
 
         return pageResult.getContent();
+    }
+
+    // Obtener los productos filtrados
+    public Page<Products> getFilteredProducts(String brand, Long categoryId, BigDecimal minPrice, BigDecimal maxPrice, String attributeName, String attributeValue, Pageable pageable) {
+        Specification<Products> spec = Specification.where(null);
+
+        if (brand != null && !brand.isEmpty()) {
+            spec = spec.and(ProductSpecification.hasBrand(brand));
+        }
+
+        if (categoryId != null && categoryId > 0) {
+            spec = spec.and(ProductSpecification.hasCategoryId(categoryId));
+        }
+
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) > 0) {
+            spec = spec.and(ProductSpecification.hasMinPrice(minPrice));
+        }
+
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) > 0) {
+            spec = spec.and(ProductSpecification.hasMaxPrice(maxPrice));
+        }
+
+        if (attributeName != null && attributeValue != null) {
+            spec = spec.and(ProductSpecification.hasAttribute(attributeName, attributeValue));
+        }
     }
 }
