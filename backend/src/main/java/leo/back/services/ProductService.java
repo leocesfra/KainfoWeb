@@ -36,7 +36,7 @@ public class ProductService {
 
     // Obtener los productos filtrados
     public Page<Products> getFilteredProducts(String brand, Long categoryId, BigDecimal minPrice, BigDecimal maxPrice, String attributeName, String attributeValue, Pageable pageable) {
-        Specification<Products> spec = Specification.where(null);
+        Specification<Products> spec = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
         if (brand != null && !brand.isEmpty()) {
             spec = spec.and(ProductSpecification.hasBrand(brand));
@@ -47,15 +47,17 @@ public class ProductService {
         }
 
         if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) > 0) {
-            spec = spec.and(ProductSpecification.hasMinPrice(minPrice));
+            spec = spec.and(ProductSpecification.priceGreaterThanOrEqual(minPrice));
         }
 
         if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) > 0) {
-            spec = spec.and(ProductSpecification.hasMaxPrice(maxPrice));
+            spec = spec.and(ProductSpecification.priceLessThanOrEqual(maxPrice));
         }
 
         if (attributeName != null && attributeValue != null) {
             spec = spec.and(ProductSpecification.hasAttribute(attributeName, attributeValue));
         }
+
+        return productRepository.findAll(spec, pageable);
     }
 }
