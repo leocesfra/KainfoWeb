@@ -5,14 +5,9 @@ import lombok.*;
 
 @Entity
 @Getter @Setter @NoArgsConstructor
-public class Categories {
+public class ProductsImages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    @JoinColumn(name = "parent_id")
-    @ManyToOne
-    private Categories parentCategory;
 }
