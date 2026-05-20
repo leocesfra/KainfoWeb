@@ -1,0 +1,67 @@
+DROP DATABASE Kainfo;
+
+CREATE DATABASE Kainfo;
+
+USE Kainfo;
+
+CREATE TABLE categories (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) NOT NULL,
+parent_id BIGINT,
+FOREIGN KEY (parent_id) REFERENCES categories(id)
+);
+
+CREATE TABLE brands (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE product_images (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+product_id BIGINT NOT NULL,
+FOREIGN KEY (product_id) REFERENCES products(id),
+image_url text NOT NULL,
+is_primary boolean NOT NULL
+);
+
+CREATE TABLE products (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) NOT NULL,
+description TEXT NOT NULL,
+price DECIMAL(10,2) NOT NULL,
+stock INT,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+SKU VARCHAR(255) NOT NULL,
+category_id BIGINT NOT NULL,
+FOREIGN KEY (category_id) REFERENCES categories(id),
+brand_id BIGINT NOT NULL,
+FOREIGN KEY (brand_id) REFERENCES brands(id),
+specifications JSON NOT NULL
+);
+
+CREATE TABLE users (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+email VARCHAR(255) NOT NULL,
+password VARCHAR(100) NOT NULL,
+rol VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE orders (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+date DATETIME NOT NULL,
+client_name VARCHAR(100) NOT NULL,
+email_client VARCHAR(255) NOT NULL,
+address VARCHAR(255) NOT NULL,
+amount DECIMAL(10,2) NOT NULL,
+state VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE orders_line (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+quantity INT NOT NULL,
+unitary_price decimal(10,2) NOT NULL,
+order_id BIGINT NOT NULL,
+product_id BIGINT NOT NULL,
+FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+FOREIGN KEY (product_id) REFERENCES products(id)
+);

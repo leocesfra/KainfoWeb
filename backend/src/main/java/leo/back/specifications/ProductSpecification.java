@@ -1,8 +1,7 @@
 package leo.back.specifications;
 
 import jakarta.persistence.criteria.Join;
-import leo.back.models.Products;
-import leo.back.models.ProductsAttributes;
+import leo.back.models.Product;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -14,7 +13,7 @@ public class ProductSpecification {
     // ==========================================
 
     // Filtro por Marca (
-    public static Specification<Products> hasBrand(String brand) {
+    public static Specification<Product> hasBrand(String brand) {
         return (root, query, criteriaBuilder) -> {
             if (brand == null || brand.isEmpty()) return null;
             return criteriaBuilder.equal(criteriaBuilder.lower(root.get("brand")), brand.toLowerCase());
@@ -22,7 +21,7 @@ public class ProductSpecification {
     }
 
     // Filtro por Categoría
-    public static Specification<Products> hasCategoryId(Long categoryId) {
+    public static Specification<Product> hasCategoryId(Long categoryId) {
         return (root, query, criteriaBuilder) -> {
             if (categoryId == null) return null;
             return criteriaBuilder.equal(root.get("category").get("id"), categoryId);
@@ -30,7 +29,7 @@ public class ProductSpecification {
     }
 
     // Filtro por Precio Mínimo
-    public static Specification<Products> priceGreaterThanOrEqual(BigDecimal minPrice) {
+    public static Specification<Product> priceGreaterThanOrEqual(BigDecimal minPrice) {
         return (root, query, criteriaBuilder) -> {
             if (minPrice == null) return null;
             return criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice);
@@ -38,7 +37,7 @@ public class ProductSpecification {
     }
 
     // Filtro por Precio Máximo
-    public static Specification<Products> priceLessThanOrEqual(BigDecimal maxPrice) {
+    public static Specification<Product> priceLessThanOrEqual(BigDecimal maxPrice) {
         return (root, query, criteriaBuilder) -> {
             if (maxPrice == null) return null;
             return criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice);
@@ -50,10 +49,10 @@ public class ProductSpecification {
     // ==========================================
 
     // 5. Filtro dinámico de Características
-    public static Specification<Products> hasAttribute(String attributeName, String attributeValue) {
+    public static Specification<Product> hasAttribute(String attributeName, String attributeValue) {
         return (root, query, criteriaBuilder) -> {
             if (attributeName == null || attributeValue == null) return null;
-            Join<Products, ProductsAttributes> attributesJoin = root.join("attributes");
+            Join<Product, ProductsAttributes> attributesJoin = root.join("attributes");
             return criteriaBuilder.and(
                     criteriaBuilder.equal(attributesJoin.get("name"), attributeName),
                     criteriaBuilder.equal(attributesJoin.get("value"), attributeValue)

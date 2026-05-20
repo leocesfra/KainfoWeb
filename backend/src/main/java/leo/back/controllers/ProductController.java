@@ -1,7 +1,6 @@
 package leo.back.controllers;
 
-import leo.back.models.Products;
-import leo.back.services.ProductService;
+import leo.back.models.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,14 +16,14 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/products")
-    public List<Products> getAllProducts() {
+    public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
     // Endpoint para el buscador avanzado y filtros
     // Ejemplo de URL: /products/search?brand=Intel&minPrice=100&page=0&size=10
     @GetMapping("/products/search")
-    public Page<Products> searchProducts(
+    public Page<Product> searchProducts(
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) BigDecimal minPrice,

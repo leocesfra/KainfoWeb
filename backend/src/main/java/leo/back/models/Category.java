@@ -1,21 +1,19 @@
 package leo.back.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter @Setter
-public class ProductsAttributes {
+@Table(name = "categories")
+@Getter @Setter @NoArgsConstructor
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    private String value;
-
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "parent_id")
     @ManyToOne
-    private Products product;
+    private Category parentCategory;
 }

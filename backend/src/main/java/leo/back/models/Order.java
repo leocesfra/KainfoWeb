@@ -1,21 +1,20 @@
 package leo.back.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
-public class Orders {
+@Table(name = "orders")
+@Getter @Setter @NoArgsConstructor
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "date")
-    private Date orderDate;
+    private LocalDateTime orderDate;
 
     @Column(name = "client_name")
     private String clientName;

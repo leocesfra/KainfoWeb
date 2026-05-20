@@ -3,13 +3,16 @@ package leo.back.models;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 @Entity
+@Table(name = "products")
 @Getter @Setter @NoArgsConstructor
-public class Products {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,15 +29,16 @@ public class Products {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    private String SKU;
+    private String sku;
 
     @JoinColumn(name = "category_id")
     @ManyToOne
-    private Categories category;
+    private Category category;
 
     @JoinColumn(name = "brand_id")
     @ManyToOne
-    private Brands brand;
+    private Brand brand;
 
-
+    @JdbcTypeCode(SqlTypes.JSON)
+    private Map<String, Object> specifications;
 }

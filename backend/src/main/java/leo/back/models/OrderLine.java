@@ -1,14 +1,13 @@
 package leo.back.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Getter @Setter
-public class OrdersLine {
+@Table(name = "orders_line")
+@Getter @Setter @NoArgsConstructor
+public class OrderLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,9 +19,9 @@ public class OrdersLine {
 
     @JoinColumn(name = "order_id")
     @ManyToOne
-    private Orders order;
+    private Order order;
 
     @JoinColumn(name = "product_id")
     @ManyToOne
-    private Products product;
+    private Product product;
 }
