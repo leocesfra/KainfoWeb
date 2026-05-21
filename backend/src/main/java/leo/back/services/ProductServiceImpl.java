@@ -18,6 +18,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
     public List<Product> filterProducts(Long categoryId, Long brandId, BigDecimal minPrice, BigDecimal maxPrice, Map<String, String> dynamicFilters) {
         // 1: Filtro por las tablas de SQL
         List<Product> filteredBySQL = productRepository.findBasicFilters(categoryId, brandId, minPrice, maxPrice);

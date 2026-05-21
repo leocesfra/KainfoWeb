@@ -8,6 +8,8 @@ import java.util.*;
 
 public interface ProductService {
 
+    List<Product> getAllProducts();
+
     List<Product> filterProducts(
             Long categoryId,
             Long brandId,

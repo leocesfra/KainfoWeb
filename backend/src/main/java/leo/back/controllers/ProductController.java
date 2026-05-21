@@ -1,37 +1,44 @@
 package leo.back.controllers;
 
 import leo.back.models.Product;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import leo.back.services.ProductService;
 import org.springframework.web.bind.annotation.*;
-
-
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.*;
+
 
 @RestController
-@RequiredArgsConstructor
+@RequestMapping("/api/products")
 public class ProductController {
+
     private final ProductService productService;
 
-    @GetMapping("/products")
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    // Ruta: GET http://localhost:8080/api/products
+    @GetMapping
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    // Endpoint para el buscador avanzado y filtros
-    // Ejemplo de URL: /products/search?brand=Intel&minPrice=100&page=0&size=10
-    @GetMapping("/products/search")
-    public Page<Product> searchProducts(
-            @RequestParam(required = false) String brand,
+    // Ruta: GET http://localhost:8080/api/products/search?categoryId=1&socket=AM4
+    @GetMapping("/search")
+    public List<Product> filterProducts(
             @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long brandId,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(required = false) String attributeName,
-            @RequestParam(required = false) String attributeValue,
-            Pageable pageable) {
+            @RequestParam Map<String, String> allParams
+    ) {
 
-        return productService.getFilteredProducts(brand, categoryId, minPrice, maxPrice, attributeName, attributeValue, pageable);
+        // Limpiamos el mapa de los filtros estáticos para dejar solo los dinámicos (el JSON)
+        allParams.remove("categoryId");
+        allParams.remove("brandId");
+        allParams.remove("minPrice");
+        allParams.remove("maxPrice");
+
+        return productService.filterProducts(categoryId, brandId, minPrice, maxPrice, allParams);
     }
 }
