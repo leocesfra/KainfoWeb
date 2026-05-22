@@ -23,7 +23,7 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-    // Ruta: GET http://localhost:8080/api/products/search?categoryId=1&socket=AM4
+    // Ruta: GET http://localhost:8080/api/products/search?
     @GetMapping("/search")
     public List<Product> filterProducts(
             @RequestParam(required = false) Long categoryId,
