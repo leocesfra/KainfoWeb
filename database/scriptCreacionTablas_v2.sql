@@ -16,14 +16,6 @@ id BIGINT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE product_images (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-product_id BIGINT NOT NULL,
-FOREIGN KEY (product_id) REFERENCES products(id),
-image_url text NOT NULL,
-is_primary boolean NOT NULL
-);
-
 CREATE TABLE products (
 id BIGINT AUTO_INCREMENT PRIMARY KEY,
 name VARCHAR(255) NOT NULL,
@@ -37,6 +29,14 @@ FOREIGN KEY (category_id) REFERENCES categories(id),
 brand_id BIGINT NOT NULL,
 FOREIGN KEY (brand_id) REFERENCES brands(id),
 specifications JSON NOT NULL
+);
+
+CREATE TABLE product_images (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+product_id BIGINT NOT NULL,
+FOREIGN KEY (product_id) REFERENCES products(id),
+image_url text NOT NULL,
+is_primary boolean NOT NULL
 );
 
 CREATE TABLE users (
