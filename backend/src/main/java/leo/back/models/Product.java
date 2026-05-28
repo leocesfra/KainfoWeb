@@ -1,5 +1,6 @@
 package leo.back.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,6 +34,7 @@ public class Product {
 
     @JoinColumn(name = "category_id")
     @ManyToOne
+    @JsonIgnoreProperties({"subCategories", "parentCategory"}) // Solo trae el id y el name de la categoría
     private Category category;
 
     @JoinColumn(name = "brand_id")

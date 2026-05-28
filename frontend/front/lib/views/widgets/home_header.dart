@@ -1,99 +1,117 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/colors.dart';
 
-class HeaderWidget extends StatelessWidget {
-  final bool isMenuOpen;
+class HeaderWidget extends StatefulWidget {
   final VoidCallback onCategoryTap;
-  final String currentLanguage;
-  final ValueChanged<String?> onLanguageChanged;
 
-  const HeaderWidget({
-    super.key,
-    required this.isMenuOpen,
-    required this.onCategoryTap,
-    required this.currentLanguage,
-    required this.onLanguageChanged,
-  });
+  const HeaderWidget({super.key, required this.onCategoryTap});
+
+  @override
+  State<HeaderWidget> createState() => _HeaderWidgetState();
+}
+
+class _HeaderWidgetState extends State<HeaderWidget> {
+  bool _searchFocused = false;
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 900;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      child: Flex(
-        direction: isMobile ? Axis.vertical : Axis.horizontal,
+    return Container(
+      width: double.infinity,
+      height: 128,
+      color: AppColors.secondaryColorLight,
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _CategoryMenuButton(
-                isOpen: isMenuOpen,
-                onTap: onCategoryTap,
-              ),
-              const SizedBox(width: 16),
-              const Text(
-                'LOGO',
-                style: TextStyle(
-                  color: AppColors.blackColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
+          // 1. Contenedor Logo (128x64)
+          Container(
+            width: 128,
+            height: 64,
+            alignment: Alignment.center,
+            child: const Text(
+              'LOGO',
+              style: TextStyle(color: AppColors.whiteColor, fontSize: 28, fontWeight: FontWeight.bold),
+            ),
           ),
-          const SizedBox(height: 14),
-          Flexible(
-            child: Container(
-              margin: EdgeInsets.only(top: isMobile ? 16 : 0),
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.whiteColor,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x22000000),
-                    offset: Offset(0, 6),
-                    blurRadius: 14,
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  const SizedBox(width: 18),
-                  const Icon(Icons.search, color: AppColors.neutralColorDark),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: 'Que estás buscando?',
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          color: Color(0xCC606161),
-                        ),
+          const SizedBox(width: 32),
+
+          // 2. Botón Categorías
+          _CategoryButton(onTap: widget.onCategoryTap),
+          const SizedBox(width: 32),
+
+          // 3. Barra de búsqueda (máx 350px, flexible)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 350),
+                child: FocusScope(
+                  child: Focus(
+                    onFocusChange: (focus) => setState(() => _searchFocused = focus),
+                    child: Container(
+                      height: 32,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.neutralColorLight,
+                        borderRadius: BorderRadius.circular(32),
+                        border: _searchFocused ? Border.all(color: AppColors.primaryColorLight, width: 1) : null,
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.search, color: AppColors.neutralColorDark, size: 20), // e8b6
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              cursorColor: AppColors.primaryColorLight,
+                              style: GoogleFonts.roboto(
+                                color: AppColors.neutralColorDark,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.italic,
+                              ),
+                              decoration: const InputDecoration(
+                                hintText: 'Buscar...',
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.only(bottom: 12),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                ],
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisSize: MainAxisSize.min,
+          const SizedBox(width: 32),
+
+          // 5. Usuario
+          const Icon(Icons.person, color: AppColors.whiteColor, size: 28), // e7fd
+          const SizedBox(width: 24),
+
+          // 6. Carrito + Toggle (Notificación/Modo)
+          Stack(
+            clipBehavior: Clip.none,
             children: [
-              _LanguageDropdown(
-                currentLanguage: currentLanguage,
-                onChanged: onLanguageChanged,
+              const Icon(Icons.shopping_cart, color: AppColors.whiteColor, size: 28), // e8cc
+              Positioned(
+                top: -4,
+                right: -4,
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryColorLight,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text('2', style: GoogleFonts.roboto(color: AppColors.whiteColor, fontSize: 10, fontWeight: FontWeight.w600)),
+                  ),
+                ),
               ),
-              const SizedBox(width: 12),
-              _HeaderIcon(icon: Icons.person_outline),
-              const SizedBox(width: 8),
-              _HeaderIcon(icon: Icons.shopping_cart_outlined),
             ],
           ),
         ],
@@ -102,77 +120,16 @@ class HeaderWidget extends StatelessWidget {
   }
 }
 
-class _HeaderIcon extends StatefulWidget {
-  final IconData icon;
-
-  const _HeaderIcon({required this.icon});
-
-  @override
-  State<_HeaderIcon> createState() => _HeaderIconState();
-}
-
-class _HeaderIconState extends State<_HeaderIcon> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: Icon(
-        widget.icon,
-        color: _hovered ? AppColors.neutralColorLight : AppColors.blackColor,
-        size: 28,
-      ),
-    );
-  }
-}
-
-class _LanguageDropdown extends StatelessWidget {
-  final String currentLanguage;
-  final ValueChanged<String?> onChanged;
-
-  const _LanguageDropdown({
-    required this.currentLanguage,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.secondaryColorDark,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          dropdownColor: AppColors.secondaryColorDark,
-          value: currentLanguage,
-          items: const [
-            DropdownMenuItem(value: 'ES', child: Text('ES', style: TextStyle(color: AppColors.whiteColor))),
-            DropdownMenuItem(value: 'EN', child: Text('EN', style: TextStyle(color: AppColors.whiteColor))),
-          ],
-          onChanged: onChanged,
-          iconEnabledColor: AppColors.whiteColor,
-          style: const TextStyle(color: AppColors.whiteColor, fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
-  }
-}
-
-class _CategoryMenuButton extends StatefulWidget {
-  final bool isOpen;
+// BOTÓN CATEGORÍAS ANIMADO
+class _CategoryButton extends StatefulWidget {
   final VoidCallback onTap;
-
-  const _CategoryMenuButton({required this.isOpen, required this.onTap});
+  const _CategoryButton({required this.onTap});
 
   @override
-  State<_CategoryMenuButton> createState() => _CategoryMenuButtonState();
+  State<_CategoryButton> createState() => _CategoryButtonState();
 }
 
-class _CategoryMenuButtonState extends State<_CategoryMenuButton> {
+class _CategoryButtonState extends State<_CategoryButton> {
   bool _hovered = false;
   bool _pressed = false;
 
@@ -180,51 +137,38 @@ class _CategoryMenuButtonState extends State<_CategoryMenuButton> {
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() {
-        _hovered = false;
-        _pressed = false;
-      }),
+      onExit: (_) => setState(() { _hovered = false; _pressed = false; }),
       child: GestureDetector(
         onTapDown: (_) => setState(() => _pressed = true),
-        onTapUp: (_) {
-          setState(() => _pressed = false);
-          widget.onTap();
-        },
+        onTapUp: (_) { setState(() => _pressed = false); widget.onTap(); },
         onTapCancel: () => setState(() => _pressed = false),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          transform: Matrix4.translationValues(0, _pressed ? 2 : 0, 0),
+          duration: const Duration(milliseconds: 100),
+          width: _pressed ? 262 : 264, // Reduce 2px al click
+          height: _pressed ? 62 : 64,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
           decoration: BoxDecoration(
-            color: _hovered ? AppColors.primaryColorLight60 : AppColors.secondaryColorDark,
-            boxShadow: _pressed
-                ? [
-                    const BoxShadow(
-                      color: AppColors.secondaryColorDark,
-                      offset: Offset(0, 1),
-                      blurRadius: 8,
-                      spreadRadius: -1,
-                    ),
-                  ]
-                : [
-                    const BoxShadow(
-                      color: AppColors.secondaryColorDark,
-                      offset: Offset(-6, 6),
-                      blurRadius: 14,
-                    ),
-                  ],
-            borderRadius: BorderRadius.circular(14),
+            color: _pressed ? AppColors.primaryColorDark : (_hovered ? AppColors.primaryColorLight60 : AppColors.primaryColorDark),
+            borderRadius: BorderRadius.circular(2),
+            border: _pressed ? Border.all(color: AppColors.secondaryColorDark, width: 2) : null, // Simula Sombra Interior
+            boxShadow: _pressed ? [] : const [
+              BoxShadow(
+                color: AppColors.blackColor,
+                offset: Offset(-4, 4), // 4px left, 4px down
+                spreadRadius: 4,
+              )
+            ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.menu, color: AppColors.whiteColor),
-              const SizedBox(width: 10),
+              const Icon(Icons.menu, color: AppColors.whiteColor, size: 24), // e5d2
+              const SizedBox(width: 8),
               Text(
                 'Categorías',
-                style: const TextStyle(
+                style: GoogleFonts.leagueSpartan(
                   color: AppColors.whiteColor,
-                  fontSize: 18,
+                  fontSize: 20, // h3
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -235,3 +179,4 @@ class _CategoryMenuButtonState extends State<_CategoryMenuButton> {
     );
   }
 }
+

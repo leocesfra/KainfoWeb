@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:front/data/repositories/category_repository.dart';
+import 'package:front/viewmodels/category_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 import 'core/constants/colors.dart';
@@ -12,15 +14,15 @@ void main() {
   // 1. Instanciamos el cliente y repositorio
   final apiClient = ApiClient();
   final productRepository = ProductRepository(apiClient);
+  final categoryRepository = CategoryRepository(apiClient);
 
   runApp(
     // 2. Inyectamos el ViewModel
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => ProductViewModel(productRepository),
-        ),
-      ],
+     providers: [
+      ChangeNotifierProvider(create: (_) => ProductViewModel(productRepository)),
+      ChangeNotifierProvider(create: (_) => CategoryViewModel(categoryRepository)),
+    ],
       child: const MyApp(),
     ),
   );

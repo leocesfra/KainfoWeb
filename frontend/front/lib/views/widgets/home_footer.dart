@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/colors.dart';
 
 class FooterWidget extends StatelessWidget {
@@ -8,32 +9,37 @@ class FooterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.secondaryColorDark,
-      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      height: 72,
+      color: AppColors.blackColor,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'Contacto',
-            style: TextStyle(
-              color: AppColors.whiteColor,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text('981 97 66 01', style: TextStyle(color: AppColors.whiteColor.withAlpha(230))),
-          const SizedBox(height: 4),
-          Text('info@kainfo.es', style: TextStyle(color: AppColors.whiteColor.withAlpha(230))),
-          const SizedBox(height: 12),
-          Text('Avenida Acea da Ma, 43, BJ, 15174 Culleredo, A Coruña', style: TextStyle(color: AppColors.whiteColor.withAlpha(204))),
-          const SizedBox(height: 16),
-          Text('Horario', style: TextStyle(color: AppColors.whiteColor.withAlpha(230), fontWeight: FontWeight.w600)),
-          const SizedBox(height: 4),
-          Text('L - V: 09:00–14:00 y 16:00–20:30', style: TextStyle(color: AppColors.whiteColor.withAlpha(204))),
-          Text('S: 09:00–14:00', style: TextStyle(color: AppColors.whiteColor.withAlpha(204))),
+          _buildFooterItem(Icons.phone, '981 97 66 01'), // e0b0
+          _buildFooterItem(Icons.email, 'info@kainfo.es'), // e158
+          _buildFooterItem(Icons.location_on, 'Av. Acea da Ma, 43'), // e0c8
+          _buildFooterItem(Icons.schedule, 'L-V: 09:00-20:30'), // ebcc
         ],
       ),
+    );
+  }
+
+  Widget _buildFooterItem(IconData icon, String text) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: AppColors.whiteColor, size: 24),
+        const SizedBox(width: 8),
+        Text(
+          text,
+          style: GoogleFonts.leagueSpartan(
+            color: AppColors.whiteColor,
+            fontSize: 18, // h3 aprox
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

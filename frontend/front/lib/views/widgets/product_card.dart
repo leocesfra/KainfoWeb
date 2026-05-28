@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/colors.dart';
 
 class ProductCard extends StatelessWidget {
   final String title;
   final String price;
-  final String? imageUrl; // Ahora aceptamos URL real
+  final String? imageUrl;
 
   const ProductCard({
     super.key,
@@ -16,82 +17,64 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 260,
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: AppColors.whiteColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 10),
-          ),
-        ],
-      ),
+      width: 248,
+      height: 336,
+      color: AppColors.whiteColor, // Fondo base
+      padding: const EdgeInsets.all(8), // Deja los 232 interiores libres
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Lógica de imagen: Network vs Asset (Placeholder)
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: imageUrl != null && imageUrl!.isNotEmpty
-                ? Image.network(
-                    imageUrl!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
-                  )
-                : _buildPlaceholder(),
+          // Contenedor Imagen (232x232)
+          Container(
+            width: 232,
+            height: 232,
+            color: AppColors.neutralColorLight,
+            child: imageUrl != null
+                ? Image.network(imageUrl!, fit: BoxFit.cover)
+                : const Icon(Icons.image, size: 64, color: AppColors.neutralColorDark),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Usamos maxLines y ellipsis por si el título es muy largo
-                Text(
-                  title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.blackColor),
-                ),
-                const SizedBox(height: 6),
-                Text(price, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.primaryColorDark)),
-                const SizedBox(height: 12),
-                AddButton(onPressed: () {}, label: 'Añadir al carrito'),
-              ],
+          const SizedBox(height: 4),
+          
+          // Contenedor Texto (232x24)
+          Container(
+            width: 232,
+            height: 24,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.roboto(color: AppColors.blackColor, fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ),
+          const SizedBox(height: 4),
+
+          // Contenedor Precio (232x24)
+          Container(
+            width: 232,
+            height: 24,
+            color: AppColors.secondaryColorLight,
+            alignment: Alignment.center,
+            child: Text(
+              price,
+              style: GoogleFonts.roboto(color: AppColors.whiteColor, fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+          ),
+          const SizedBox(height: 4),
+
+          // Botón Añadir (232x24)
+          _AddCartButton(),
         ],
       ),
     );
   }
-
-  // Widget extraído para mantener el código limpio
-  Widget _buildPlaceholder() {
-    return Container(
-      height: 150,
-      color: AppColors.neutralColorLight,
-      child: const Center(
-        child: Icon(Icons.image_not_supported, size: 50, color: AppColors.neutralColorDark),
-      ),
-    );
-  }
 }
 
-class AddButton extends StatefulWidget {
-  final VoidCallback onPressed;
-  final String label;
-
-  const AddButton({super.key, required this.onPressed, required this.label});
-
+class _AddCartButton extends StatefulWidget {
   @override
-  State<AddButton> createState() => _AddButtonState();
+  State<_AddCartButton> createState() => _AddCartButtonState();
 }
 
-class _AddButtonState extends State<AddButton> {
+class _AddCartButtonState extends State<_AddCartButton> {
   bool _hovered = false;
   bool _pressed = false;
 
@@ -99,46 +82,26 @@ class _AddButtonState extends State<AddButton> {
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() {
-        _hovered = false;
-        _pressed = false;
-      }),
+      onExit: (_) => setState(() { _hovered = false; _pressed = false; }),
       child: GestureDetector(
         onTapDown: (_) => setState(() => _pressed = true),
-        onTapUp: (_) {
-          setState(() => _pressed = false);
-          widget.onPressed();
-        },
+        onTapUp: (_) => setState(() => _pressed = false),
         onTapCancel: () => setState(() => _pressed = false),
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          transform: Matrix4.translationValues(0, _pressed ? 2 : 0, 0),
+          duration: const Duration(milliseconds: 100),
+          width: _pressed ? 228 : 232, // Reducir 4px
+          height: _pressed ? 20 : 24,  // Reducir 4px
+          alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: _hovered ? AppColors.primaryColorLight60 : AppColors.secondaryColorDark,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: _pressed
-                ? const [
-                    BoxShadow(
-                      color: AppColors.secondaryColorDark,
-                      offset: Offset(0, 1),
-                      blurRadius: 6,
-                      spreadRadius: -1,
-                    ),
-                  ]
-                : const [
-                    BoxShadow(
-                      color: AppColors.secondaryColorDark,
-                      offset: Offset(-4, 4),
-                      blurRadius: 12,
-                    ),
-                  ],
+            color: _hovered ? AppColors.primaryColorLight60 : AppColors.primaryColorLight,
+            border: _pressed ? Border.all(color: AppColors.secondaryColorDark, width: 2) : null,
+            boxShadow: _pressed ? [] : const [
+              BoxShadow(color: AppColors.blackColor, offset: Offset(4, 4), spreadRadius: 2, blurRadius: 8)
+            ],
           ),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          child: Center(
-            child: Text(
-              widget.label,
-              style: const TextStyle(color: AppColors.whiteColor, fontWeight: FontWeight.w600, fontSize: 16),
-            ),
+          child: Text(
+            'AÑADIR',
+            style: GoogleFonts.roboto(color: AppColors.whiteColor, fontSize: 14, fontWeight: FontWeight.w600),
           ),
         ),
       ),

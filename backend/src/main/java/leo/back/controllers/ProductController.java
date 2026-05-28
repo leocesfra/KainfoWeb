@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {

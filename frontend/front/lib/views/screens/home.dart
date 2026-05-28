@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:front/viewmodels/category_viewmodel.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/constants/colors.dart';
@@ -6,7 +8,7 @@ import '../../viewmodels/product_viewmodel.dart';
 import '../widgets/home_header.dart';
 import '../widgets/home_footer.dart';
 import '../widgets/product_card.dart';
-import '../widgets/promo_banner.dart';
+import '../widgets/brand_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,233 +19,247 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _menuOpen = false;
-  String _selectedLanguage = 'ES';
-  
-  // Variables del menú lateral
-  int _expandedIndex = -1;
-  int _hoveredCategory = -1;
-  int _hoveredChild = -1;
-
-  final List<Map<String, List<String>>> _categories = [
-    {'Componentes': ['Placas base', 'Procesadores', 'Memorias', 'Almacenamiento']},
-    {'Periféricos': ['Monitor', 'Teclados', 'Ratones', 'Auriculares']},
-    {'Portátiles': ['Ultrabooks', 'Gaming', 'Oficina']},
-  ];
 
   @override
-  void initState() {
-    super.initState();
-    // 💡 INYECCIÓN: Le decimos al ViewModel que cargue los productos al iniciar la pantalla
-    // Usamos WidgetsBinding para esperar a que termine el primer renderizado
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProductViewModel>().fetchProducts();
-    });
-  }
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    context.read<ProductViewModel>().fetchProducts();
+    // Pedimos las categorías a MariaDB:
+    context.read<CategoryViewModel>().fetchCategories(); 
+  });
+}
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isWide = size.width > 1000;
-
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       body: Stack(
         children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                HeaderWidget(
-                  isMenuOpen: _menuOpen,
-                  onCategoryTap: () => setState(() => _menuOpen = !_menuOpen),
-                  currentLanguage: _selectedLanguage,
-                  onLanguageChanged: (value) {
-                    if (value != null) {
-                      setState(() => _selectedLanguage = value);
-                    }
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40), // Márgenes más amplios como en Figma
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 24),
-                      // 💡 AÑADIDO: El banner promocional
-                      const PromoBannerWidget(),
-                      const SizedBox(height: 48),
-                      
-                      Text('Novedades', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 36, fontWeight: FontWeight.w800, color: AppColors.blackColor)),
-                      const SizedBox(height: 24),
-                      
-                      // 💡 INYECCIÓN: Consumer para reaccionar a los datos de MariaDB
+          Column(
+            children: [
+              HeaderWidget(
+                onCategoryTap: () => setState(() => _menuOpen = !_menuOpen),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 32,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // TÍTULO: Novedades
+                        Text(
+                          'Novedades',
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 32,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.blackColor,
+                          ), // H2
+                        ),
+                        const SizedBox(height: 24),
+
+                      // CARRUSEL (Separación 64px)
                       SizedBox(
-                        height: 330,
+                        height: 336, // Altura exacta de tu card
                         child: Consumer<ProductViewModel>(
                           builder: (context, viewModel, child) {
-                            // Estado: Cargando
-                            if (viewModel.state == ViewState.loading || viewModel.state == ViewState.initial) {
-                              return const Center(child: CircularProgressIndicator(color: AppColors.primaryColorDark));
-                            }
-                            
-                            // Estado: Error
-                            if (viewModel.state == ViewState.error) {
+                            if (viewModel.state == ViewState.loading)
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            if (viewModel.products.isEmpty) {
+                              // <-- AJUSTE: Mensaje vacío con diseño
                               return Center(
-                                child: Text('Error: ${viewModel.errorMessage}', style: const TextStyle(color: Colors.red)),
+                                child: Text(
+                                  'No hay productos',
+                                  style: GoogleFonts.leagueSpartan(
+                                    fontSize: 32, // h2
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.secondaryColorDark,
+                                  ),
+                                ),
                               );
                             }
 
-                            // Estado: Éxito pero lista vacía
-                            if (viewModel.products.isEmpty) {
-                              return const Center(child: Text('No hay productos disponibles.'));
-                            }
-
-                            // Estado: Éxito con datos
-                            return ListView.builder(
+                            return ListView.separated(
                               scrollDirection: Axis.horizontal,
                               itemCount: viewModel.products.length,
+                              separatorBuilder: (_, __) => const SizedBox(
+                                width: 64,
+                              ), // Regla: 64px de separación
                               itemBuilder: (context, index) {
-                                final product = viewModel.products[index];
+                                final p = viewModel.products[index];
                                 return ProductCard(
-                                  title: product.name,
-                                  price: '${product.price.toStringAsFixed(2)} €',
-                                  // TODO: Aquí pasaremos la URL de la imagen cuando tengas Cloudinary
-                                  // imageUrl: product.images.first.imageUrl, 
+                                  title: p.name,
+                                  price: '${p.price} €',
                                 );
                               },
                             );
                           },
                         ),
                       ),
-                      
-                      const SizedBox(height: 48),
-                      Text('Nuestras marcas', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.blackColor)),
-                      const SizedBox(height: 24),
-                      
-                      // Marcas (Placeholder visual)
-                      Wrap(
-                        spacing: 16,
-                        runSpacing: 16,
-                        children: List.generate(
-                          5,
-                          (index) => Container(
-                            width: isWide ? 180 : ((size.width - 96) / 2).clamp(100.0, double.infinity),
-                            height: 120,
-                            decoration: BoxDecoration(
-                              color: AppColors.neutralColorLight,
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                            child: const Center(
-                              child: Icon(Icons.business, size: 40, color: AppColors.neutralColorDark),
-                            ),
-                          ),
-                        ),
+                      const SizedBox(height: 16),
+                      // Controles del Carrusel (Flechas y Puntos)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.settings,
+                            color: AppColors.primaryColorDark,
+                            size: 24,
+                          ), // Punto 1 (Activo)
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.settings,
+                            color: AppColors.secondaryColorDark,
+                            size: 24,
+                          ), // Punto 2
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.settings,
+                            color: AppColors.secondaryColorDark,
+                            size: 24,
+                          ), // Punto 3
+                        ],
                       ),
-                      const SizedBox(height: 60),
-                    ],
+
+                      const SizedBox(height: 64),
+
+                      // TÍTULO: Nuestras Marcas
+                      Text(
+                        'Nuestras marcas',
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.blackColor,
+                        ), // H2
+                      ),
+                      const SizedBox(height: 24),
+
+                      // BANNER MARCAS (Separación 128px)
+                      const Wrap(
+                        spacing: 128,
+                        children: [
+                          BrandCard(
+                            brandName: 'Logitech',
+                            imageName: 'logitech.png',
+                          ),
+                          BrandCard(
+                            brandName: 'HP',
+                            imageName: 'HP.png',
+                          ),
+                          BrandCard(
+                            brandName: 'primux',
+                            imageName: 'primux.png',
+                          ),
+                          BrandCard(
+                            brandName: 'Dell',
+                            imageName: 'HP.png',
+                          ),
+                          BrandCard(
+                            brandName: 'ASUS',
+                            imageName: 'logitech.png',
+                          ),
+                        ],
+                      ),
+                        ],
+                    ),
                   ),
                 ),
-                const FooterWidget(),
-              ],
-            ),
+              ),
+              const FooterWidget(),
+            ],
           ),
-          _buildSideMenu(size.width),
+          _buildExactSideMenu(),
         ],
       ),
     );
   }
 
-  Widget _buildSideMenu(double screenWidth) {
-    final width = screenWidth * 0.75;
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOut,
-      left: _menuOpen ? 0 : -width,
-      top: 0,
-      bottom: 0,
-      child: SizedBox(
-        width: width,
-        child: Material(
-          color: AppColors.secondaryColorDark,
-          elevation: 18,
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Categorías', style: TextStyle(color: AppColors.whiteColor, fontSize: 22, fontWeight: FontWeight.w700)),
-                      InkWell(
-                        onTap: () => setState(() => _menuOpen = false),
-                        hoverColor: AppColors.primaryColorDark60,
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColorDark60,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(Icons.close, color: AppColors.whiteColor),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: _categories.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final parent = _categories[index].keys.first;
-                        final children = _categories[index][parent] ?? [];
-                        final hovered = _hoveredCategory == index;
-                        final expanded = _expandedIndex == index;
+  // MENÚ LATERAL (312px)
+ Widget _buildExactSideMenu() {
+  return AnimatedPositioned(
+    duration: const Duration(milliseconds: 250),
+    curve: Curves.easeInOut,
+    left: _menuOpen ? 0 : -312,
+    top: 0,
+    bottom: 0,
+    child: Container(
+      width: 312,
+      color: AppColors.secondaryColorLight,
+      padding: const EdgeInsets.only(top: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          IconButton(
+            icon: const Icon(Icons.close, color: AppColors.whiteColor),
+            onPressed: () => setState(() => _menuOpen = false),
+          ),
+          Expanded(
+            child: Consumer<CategoryViewModel>(
+              builder: (context, viewModel, child) {
+                if (viewModel.state == CategoryViewState.loading) {
+                  return const Center(child: CircularProgressIndicator(color: AppColors.whiteColor));
+                }
+                
+                if (viewModel.categories.isEmpty) {
+                  return const Center(child: Text('Sin categorías', style: TextStyle(color: AppColors.whiteColor)));
+                }
 
-                        return MouseRegion(
-                          onEnter: (_) => setState(() => _hoveredCategory = index),
-                          onExit: (_) => setState(() => _hoveredCategory = -1),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: hovered ? AppColors.primaryColorDark60 : Colors.transparent,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              children: [
-                                ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  title: Text(parent, style: const TextStyle(color: AppColors.whiteColor, fontWeight: FontWeight.w700, fontSize: 18)),
-                                  trailing: Icon(expanded ? Icons.expand_less : Icons.expand_more, color: AppColors.whiteColor),
-                                  onTap: () => setState(() => _expandedIndex = expanded ? -1 : index),
-                                ),
-                                if (expanded)
-                                  for (var childIndex = 0; childIndex < children.length; childIndex += 1)
-                                    MouseRegion(
-                                      onEnter: (_) => setState(() => _hoveredChild = childIndex),
-                                      onExit: (_) => setState(() => _hoveredChild = -1),
-                                      child: Container(
-                                        color: _hoveredChild == childIndex && _expandedIndex == index ? AppColors.primaryColorLight60 : Colors.transparent,
-                                        child: ListTile(
-                                          contentPadding: const EdgeInsets.only(left: 36, right: 16),
-                                          title: Text(children[childIndex], style: const TextStyle(color: AppColors.whiteColor, fontSize: 16)),
-                                          onTap: () {},
-                                        ),
-                                      ),
-                                    ),
-                              ],
-                            ),
+                return ListView.builder(
+                  itemCount: viewModel.categories.length,
+                  itemBuilder: (context, index) {
+                    final category = viewModel.categories[index];
+                    
+                    // Widget nativo de Flutter para listas desplegables
+                    return Theme(
+                      // Quitamos las líneas divisorias feas por defecto
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        iconColor: AppColors.whiteColor,
+                        collapsedIconColor: AppColors.whiteColor,
+                        // Icono base (Puedes hacer un switch según el nombre de la categoría si quieres iconos distintos)
+                        leading: const Icon(Icons.memory, color: AppColors.whiteColor), 
+                        title: Text(
+                          category.name,
+                          style: GoogleFonts.leagueSpartan(
+                            color: AppColors.whiteColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                        ),
+                        // Aquí pintamos los hijos (Placas base, procesadores...)
+                        children: category.subCategories.map((subCategory) {
+                          return ListTile(
+                            contentPadding: const EdgeInsets.only(left: 72), // Sangría
+                            title: Text(
+                              subCategory.name,
+                              style: GoogleFonts.roboto(
+                                color: AppColors.whiteColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            onTap: () {
+                              // Aquí en el futuro filtraremos los productos por subcategoría
+                              setState(() => _menuOpen = false); 
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
