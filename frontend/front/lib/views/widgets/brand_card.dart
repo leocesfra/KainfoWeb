@@ -23,7 +23,7 @@ class BrandCard extends StatelessWidget {
             child: Image.asset(
               'images/brands/$imageName',
               fit: BoxFit.contain,
-              errorBuilder: (_,__,___) => const Icon(Icons.business, color: AppColors.neutralColorDark),
+              errorBuilder: (_,_,_) => const Icon(Icons.business, color: AppColors.neutralColorDark),
             ),
           ),
           const SizedBox(height: 8),

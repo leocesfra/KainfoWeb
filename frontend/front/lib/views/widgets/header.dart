@@ -31,7 +31,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
             alignment: Alignment.center,
             child: const Text(
               'LOGO',
-              style: TextStyle(color: AppColors.whiteColor, fontSize: 28, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: AppColors.whiteColor,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           const SizedBox(width: 32),
@@ -42,25 +46,31 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
           // 3. Barra de búsqueda (máx 350px, flexible)
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(
+              // <-- Centrado
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 350),
+                constraints: const BoxConstraints(
+                  maxWidth: 450,
+                ), // <-- Limita expansión
                 child: FocusScope(
                   child: Focus(
-                    onFocusChange: (focus) => setState(() => _searchFocused = focus),
+                    onFocusChange: (focus) =>
+                        setState(() => _searchFocused = focus),
                     child: Container(
                       height: 32,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
                         color: AppColors.neutralColorLight,
                         borderRadius: BorderRadius.circular(32),
-                        border: _searchFocused ? Border.all(color: AppColors.primaryColorLight, width: 1) : null,
+                        border: _searchFocused
+                            ? Border.all(
+                                color: AppColors.primaryColorLight,
+                                width: 1,
+                              )
+                            : null,
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.search, color: AppColors.neutralColorDark, size: 20), // e8b6
-                          const SizedBox(width: 8),
                           Expanded(
                             child: TextField(
                               cursorColor: AppColors.primaryColorLight,
@@ -71,13 +81,18 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                 fontStyle: FontStyle.italic,
                               ),
                               decoration: const InputDecoration(
-                                hintText: 'Buscar...',
+                                hintText: 'Que estás buscando?',
                                 border: InputBorder.none,
                                 isDense: true,
                                 contentPadding: EdgeInsets.only(bottom: 12),
                               ),
                             ),
                           ),
+                          const Icon(
+                            Icons.search,
+                            color: AppColors.neutralColorDark,
+                            size: 20,
+                          ), // Lupa en extremo derecho
                         ],
                       ),
                     ),
@@ -89,14 +104,22 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           const SizedBox(width: 32),
 
           // 5. Usuario
-          const Icon(Icons.person, color: AppColors.whiteColor, size: 28), // e7fd
+          const Icon(
+            Icons.person,
+            color: AppColors.whiteColor,
+            size: 28,
+          ), // e7fd
           const SizedBox(width: 24),
 
           // 6. Carrito + Toggle (Notificación/Modo)
           Stack(
             clipBehavior: Clip.none,
             children: [
-              const Icon(Icons.shopping_cart, color: AppColors.whiteColor, size: 28), // e8cc
+              const Icon(
+                Icons.shopping_cart,
+                color: AppColors.whiteColor,
+                size: 28,
+              ), // e8cc
               Positioned(
                 top: -4,
                 right: -4,
@@ -108,7 +131,14 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                     shape: BoxShape.circle,
                   ),
                   child: Center(
-                    child: Text('2', style: GoogleFonts.roboto(color: AppColors.whiteColor, fontSize: 10, fontWeight: FontWeight.w600)),
+                    child: Text(
+                      '2',
+                      style: GoogleFonts.roboto(
+                        color: AppColors.whiteColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -137,10 +167,16 @@ class _CategoryButtonState extends State<_CategoryButton> {
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() { _hovered = false; _pressed = false; }),
+      onExit: (_) => setState(() {
+        _hovered = false;
+        _pressed = false;
+      }),
       child: GestureDetector(
         onTapDown: (_) => setState(() => _pressed = true),
-        onTapUp: (_) { setState(() => _pressed = false); widget.onTap(); },
+        onTapUp: (_) {
+          setState(() => _pressed = false);
+          widget.onTap();
+        },
         onTapCancel: () => setState(() => _pressed = false),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 100),
@@ -148,21 +184,33 @@ class _CategoryButtonState extends State<_CategoryButton> {
           height: _pressed ? 62 : 64,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
           decoration: BoxDecoration(
-            color: _pressed ? AppColors.primaryColorDark : (_hovered ? AppColors.primaryColorLight60 : AppColors.primaryColorDark),
+            color: _pressed
+                ? AppColors.primaryColorDark
+                : (_hovered
+                      ? AppColors.primaryColorLight60
+                      : AppColors.primaryColorDark),
             borderRadius: BorderRadius.circular(2),
-            border: _pressed ? Border.all(color: AppColors.secondaryColorDark, width: 2) : null, // Simula Sombra Interior
-            boxShadow: _pressed ? [] : const [
-              BoxShadow(
-                color: AppColors.blackColor,
-                offset: Offset(-4, 4), // 4px left, 4px down
-                spreadRadius: 4,
-              )
-            ],
+            border: _pressed
+                ? Border.all(color: AppColors.secondaryColorDark, width: 2)
+                : null, // Simula Sombra Interior
+            boxShadow: _pressed
+                ? []
+                : const [
+                    BoxShadow(
+                      color: AppColors.blackColor,
+                      offset: Offset(-4, 4), // 4px left, 4px down
+                      spreadRadius: 4,
+                    ),
+                  ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.menu, color: AppColors.whiteColor, size: 24), // e5d2
+              const Icon(
+                Icons.menu,
+                color: AppColors.whiteColor,
+                size: 24,
+              ), // e5d2
               const SizedBox(width: 8),
               Text(
                 'Categorías',
@@ -179,4 +227,3 @@ class _CategoryButtonState extends State<_CategoryButton> {
     );
   }
 }
-

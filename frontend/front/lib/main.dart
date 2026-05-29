@@ -44,8 +44,7 @@ class MyApp extends StatelessWidget {
           secondary: AppColors.secondaryColorDark,
           onPrimary: AppColors.whiteColor,
         ),
-        textTheme: AppTypography.leagueSpartanTextTheme.apply(bodyColor: AppColors.blackColor),
-        primaryTextTheme: AppTypography.robotoTextTheme.apply(bodyColor: AppColors.blackColor),
+        textTheme: AppTypography.colorBlack,
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.secondaryColorDark,
           foregroundColor: AppColors.whiteColor,

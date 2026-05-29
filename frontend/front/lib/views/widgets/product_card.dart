@@ -6,64 +6,72 @@ class ProductCard extends StatelessWidget {
   final String title;
   final String price;
   final String? imageUrl;
+  final VoidCallback? onTap; // <-- 1. Nueva variable para detectar clics
 
   const ProductCard({
     super.key,
     required this.title,
     required this.price,
     this.imageUrl,
+    this.onTap, // <-- 2. Añadido al constructor
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 248,
-      height: 336,
-      color: AppColors.whiteColor, // Fondo base
-      padding: const EdgeInsets.all(8), // Deja los 232 interiores libres
-      child: Column(
-        children: [
-          // Contenedor Imagen (232x232)
-          Container(
-            width: 232,
-            height: 232,
-            color: AppColors.neutralColorLight,
-            child: imageUrl != null
-                ? Image.network(imageUrl!, fit: BoxFit.cover)
-                : const Icon(Icons.image, size: 64, color: AppColors.neutralColorDark),
-          ),
-          const SizedBox(height: 4),
-          
-          // Contenedor Texto (232x24)
-          Container(
-            width: 232,
-            height: 24,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.roboto(color: AppColors.blackColor, fontSize: 18, fontWeight: FontWeight.w500),
-            ),
-          ),
-          const SizedBox(height: 4),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click, // <-- 3. Cursor de manita
+      child: GestureDetector(
+        onTap: onTap, // <-- 4. Acción al clicar la tarjeta
+        child: Container(
+          width: 248,
+          height: 336,
+          color: AppColors.whiteColor,
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              // Contenedor Imagen (232x232)
+              Container(
+                width: 232,
+                height: 232,
+                color: AppColors.neutralColorLight,
+                child: imageUrl != null && imageUrl!.isNotEmpty
+                    ? Image.network(imageUrl!, fit: BoxFit.cover)
+                    : const Icon(Icons.image, size: 64, color: AppColors.neutralColorDark),
+              ),
+              const SizedBox(height: 4),
+              
+              // Contenedor Texto (232x24)
+              Container(
+                width: 232,
+                height: 24,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.roboto(color: AppColors.blackColor, fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+              ),
+              const SizedBox(height: 4),
 
-          // Contenedor Precio (232x24)
-          Container(
-            width: 232,
-            height: 24,
-            color: AppColors.secondaryColorLight,
-            alignment: Alignment.center,
-            child: Text(
-              price,
-              style: GoogleFonts.roboto(color: AppColors.whiteColor, fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-          ),
-          const SizedBox(height: 4),
+              // Contenedor Precio (232x24)
+              Container(
+                width: 232,
+                height: 24,
+                color: AppColors.secondaryColorLight,
+                alignment: Alignment.center,
+                child: Text(
+                  price,
+                  style: GoogleFonts.roboto(color: AppColors.whiteColor, fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const SizedBox(height: 4),
 
-          // Botón Añadir (232x24)
-          _AddCartButton(),
-        ],
+              // Botón Añadir (232x24)
+              _AddCartButton(),
+            ],
+          ),
+        ),
       ),
     );
   }

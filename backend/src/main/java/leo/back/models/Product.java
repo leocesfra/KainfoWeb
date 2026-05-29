@@ -43,4 +43,7 @@ public class Product {
 
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> specifications;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ProductImage> images;
 }

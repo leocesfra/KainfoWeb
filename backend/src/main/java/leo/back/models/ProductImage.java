@@ -1,5 +1,6 @@
 package leo.back.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,8 +12,9 @@ public class ProductImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "product_id")
     @ManyToOne
+    @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
     @Column(name = "image_url")
