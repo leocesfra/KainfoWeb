@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/colors.dart';
+import '../screens/login.dart';
 
 class HeaderWidget extends StatefulWidget {
   final VoidCallback onCategoryTap;
@@ -104,10 +105,19 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           const SizedBox(width: 32),
 
           // 5. Usuario
-          const Icon(
-            Icons.person,
-            color: AppColors.whiteColor,
-            size: 28,
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+            mouseCursor: SystemMouseCursors.click,
+            child: const Icon(
+              Icons.person,
+              color: AppColors.whiteColor,
+              size: 28,
+            ),
           ), // e7fd
           const SizedBox(width: 24),
 

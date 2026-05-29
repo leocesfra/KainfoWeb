@@ -110,8 +110,26 @@ INSERT INTO products (name, description, price, stock, sku, category_id, brand_i
 	}'
 );
 
+INSERT INTO product_images (product_id, image_url, is_primary) VALUES
+(1, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-7-7800x3d_box_pk0sdo.webp', true),
+(1, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-7-7800x3d_gacyx0.webp', false),
+(2, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916980/ryzen-9-9950x_box_o8ycvc.webp', true),
+(2, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-9-9950x_qlewsu.webp', false),
+(3, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-5-8600g_box_dvqnsg.webp', true),
+(3, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916978/ryzen-5-8600g_dk7lfv.webp', false),
+(4, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-7-7800x3d_box_pk0sdo.webp', true),
+(4, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-7-7800x3d_gacyx0.webp', false),
+(5, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916980/ryzen-9-9950x_box_o8ycvc.webp', true),
+(5, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-9-9950x_qlewsu.webp', false),
+(6, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-5-8600g_box_dvqnsg.webp', true),
+(6, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916978/ryzen-5-8600g_dk7lfv.webp', false),
+(7, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-7-7800x3d_box_pk0sdo.webp', true),
+(7, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-7-7800x3d_gacyx0.webp', false),
+(8, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916980/ryzen-9-9950x_box_o8ycvc.webp', true),
+(8, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-9-9950x_qlewsu.webp', false),
+(9, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916979/ryzen-5-8600g_box_dvqnsg.webp', true),
+(9, 'https://res.cloudinary.com/dttbykl0c/image/upload/v1779916978/ryzen-5-8600g_dk7lfv.webp', false);
 
-
-
+select * from product_images;
 
 

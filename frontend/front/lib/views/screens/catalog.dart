@@ -252,7 +252,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 // 2. WIDGET PANEL DE FILTROS DERECHO (EndDrawer)
 // ==========================================
 class _FilterDrawer extends StatefulWidget {
-  const _FilterDrawer({super.key});
+  const _FilterDrawer();
 
   @override
   State<_FilterDrawer> createState() => _FilterDrawerState();

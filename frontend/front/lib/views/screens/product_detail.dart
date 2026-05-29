@@ -439,7 +439,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 }
 
 class _AddCartButtonDetail extends StatelessWidget {
-  const _AddCartButtonDetail({super.key});
+  const _AddCartButtonDetail();
 
   @override
   Widget build(BuildContext context) {
