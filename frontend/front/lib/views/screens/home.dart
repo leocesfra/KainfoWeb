@@ -66,10 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 336, // Altura exacta de tu card
                           child: Consumer<ProductViewModel>(
                             builder: (context, viewModel, child) {
-                              if (viewModel.state == ViewState.loading)
+                              if (viewModel.state == ViewState.loading) {
                                 return const Center(
                                   child: CircularProgressIndicator(),
                                 );
+                              }
                               if (viewModel.products.isEmpty) {
                                 // <-- AJUSTE: Mensaje vacío con diseño
                                 return Center(
@@ -88,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               return ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: viewModel.products.length,
-                                separatorBuilder: (_, __) => const SizedBox(
+                                separatorBuilder: (_, _) => const SizedBox(
                                   width: 64,
                                 ), // Regla: 64px de separación
                                 itemBuilder: (context, index) {
