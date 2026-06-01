@@ -38,6 +38,36 @@ public class ProductServiceImpl implements ProductService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Product addProduct(Product product) {
+        // Guarda el producto directamente en la BD
+        return productRepository.save(product);
+    }
+
+    @Override
+    public Product updateProduct(Long id, Product productDetails) {
+        // Buscamos el producto, si existe lo modificamos, si no lanzamos error
+        return productRepository.findById(id).map(existingProduct -> {
+            existingProduct.setName(productDetails.getName());
+            existingProduct.setDescription(productDetails.getDescription());
+            existingProduct.setPrice(productDetails.getPrice());
+            existingProduct.setStock(productDetails.getStock());
+            existingProduct.setSku(productDetails.getSku());
+            existingProduct.setBrand(productDetails.getBrand());
+            existingProduct.setCategory(productDetails.getCategory());
+            existingProduct.setSpecifications(productDetails.getSpecifications());
+
+            // Guardamos los cambios
+            return productRepository.save(existingProduct);
+        }).orElseThrow(() -> new RuntimeException("Producto no encontrado con el ID: " + id));
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        // Borra por ID
+        productRepository.deleteById(id);
+    }
+
     private boolean matchesAllDynamicFilters(Product product, Map<String, String> dynamicFilters) {
         Map<String, Object> specs = product.getSpecifications();
 
@@ -57,4 +87,6 @@ public class ProductServiceImpl implements ProductService{
         }
         return true;
     }
+
+
 }

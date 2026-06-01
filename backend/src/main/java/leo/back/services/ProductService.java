@@ -8,8 +8,10 @@ import java.util.*;
 
 public interface ProductService {
 
+    // GET All
     List<Product> getAllProducts();
 
+    // GET Filtered
     List<Product> filterProducts(
             Long categoryId,
             Long brandId,
@@ -17,4 +19,13 @@ public interface ProductService {
             BigDecimal maxPrice,
             Map<String, String> dynamicFilters
     );
+
+    // POST
+    Product addProduct(Product product);
+
+    // PUT
+    Product updateProduct(Long id, Product productDetails);
+
+    // DELETE
+    void deleteProduct(Long id);
 }
