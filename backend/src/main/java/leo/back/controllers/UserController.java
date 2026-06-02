@@ -1,6 +1,6 @@
 package leo.back.controllers;
 
-import leo.back.models.LoginRequestDTO;
+import leo.back.dto.LoginRequestDTO;
 import leo.back.services.UserService;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,8 @@
 package leo.back.services;
 
+import leo.back.dto.ProductCreateDTO;
 import leo.back.models.Product;
+import leo.back.models.ProductImage;
 import leo.back.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +41,33 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Product addProduct(Product product) {
-        // Guarda el producto directamente en la BD
-        return productRepository.save(product);
+    public Product addProduct(ProductCreateDTO dto) {
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setStock(dto.getStock());
+        product.setCategory(dto.getCategory());
+        product.setSpecifications(dto.getSpecifications());
+
+        // Guardamos el producto primero para que tenga ID
+        Product savedProduct = productRepository.save(product);
+
+        // Ahora convertimos las URLs (String) a ProductImage (Objetos)
+        if (dto.getGalleryImages() != null && !dto.getGalleryImages().isEmpty()) {
+            List<ProductImage> images = new ArrayList<>();
+            for (int i = 0; i < dto.getGalleryImages().size(); i++) {
+                ProductImage img = new ProductImage();
+                img.setImageUrl(dto.getGalleryImages().get(i));
+                img.setPrimary(i == 0); // La primera foto es la principal
+                img.setProduct(savedProduct); // Le asignamos el producto recién creado
+                images.add(img);
+            }
+            // Guarda las imágenes en su repositorio correspondiente
+            // productImageRepository.saveAll(images);
+        }
+
+        return savedProduct;
     }
 
     @Override

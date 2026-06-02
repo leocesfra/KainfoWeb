@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/material.dart';
 import 'package:front/viewmodels/category_viewmodel.dart';
 import 'package:front/views/screens/catalog.dart';
@@ -25,7 +27,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final isDesktop = size.width > 900;
+    final bool isDesktop = true; 
     final images = widget.product.galleryImages.isNotEmpty
         ? widget.product.galleryImages
         : [''];

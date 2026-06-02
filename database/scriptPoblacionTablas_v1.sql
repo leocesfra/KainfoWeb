@@ -20,3 +20,5 @@ INSERT IGNORE INTO categories (id, name, parent_id) VALUES
 (32, 'Teclados', 2),
 (33, 'Ratones', 2),
 (34, 'Auriculares', 2);
+
+select * from users;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/core/routes/app_routes.dart';
 import '../../core/constants/colors.dart';
 import '../../core/constants/typography.dart';
 import '../screens/home.dart'; // Ajusta la ruta a tu HomeScreen
@@ -21,65 +22,95 @@ class _AdminHeaderWidgetState extends State<AdminHeaderWidget> {
       color: AppColors.secondaryColorLight,
       child: Row(
         children: [
-          Image.asset('assets/images/logo.png', height: 40, errorBuilder: (_,__,___) => const Text('LOGO', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold))),
-          const SizedBox(width: 40),
-          
-          AnimatedHoverButton(
-            onTap: widget.onCategoryTap, // <-- CONECTADO AL MENÚ
-            baseColor: AppColors.primaryColorDark,
-            borderRadius: 4,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              child: Row(
-                children: [
-                  const Icon(Icons.menu, color: AppColors.whiteColor),
-                  const SizedBox(width: 8),
-                  Text('Categorías', style: AppTypography.colorWhite.titleLarge),
-                ],
+          Image.asset(
+            'assets/images/logo.png',
+            height: 40,
+            errorBuilder: (_, __, ___) => const Text(
+              'LOGO',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          
+          const SizedBox(width: 40),
+
+          AnimatedHoverButton(
+            onTap: () {
+              Navigator.pushReplacementNamed(
+                context,
+                AppRoutes.home,
+              ); 
+            },
+            baseColor: Colors.transparent,
+            child: const Icon(
+              Icons.logout,
+              color: AppColors.whiteColor,
+              size: 28,
+            ),
+          ),
+
           Expanded(
             child: Center(
               child: Container(
-                width: 450, // <-- MÁS GRANDE
+                width: 450, 
                 height: 40,
-                decoration: BoxDecoration(color: AppColors.neutralColorLight, borderRadius: BorderRadius.circular(32)),
+                decoration: BoxDecoration(
+                  color: AppColors.neutralColorLight,
+                  borderRadius: BorderRadius.circular(32),
+                ),
                 child: TextField(
                   cursorColor: AppColors.primaryColorLight,
-                  // El TextField usa el cursor de texto ("escribiendo") por defecto
                   decoration: InputDecoration(
                     hintText: 'Que estás buscando?',
                     filled: true,
                     fillColor: AppColors.neutralColorLight,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                    suffixIcon: const Icon(Icons.search, color: AppColors.neutralColorDark),
-                    // Borde normal invisible
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 0,
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.search,
+                      color: AppColors.neutralColorDark,
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(32),
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
-                    // Borde al seleccionar
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(32),
-                      borderSide: const BorderSide(color: AppColors.primaryColorLight, width: 1), // <-- BORDE FOCUS
+                      borderSide: const BorderSide(
+                        color: AppColors.primaryColorLight,
+                        width: 1,
+                      ), // 
                     ),
                   ),
                 ),
               ),
             ),
           ),
-          
-          Switch(value: false, onChanged: (v) {}, activeColor: AppColors.primaryColorLight),
+
+          Switch(
+            value: false,
+            onChanged: (v) {},
+            activeColor: AppColors.primaryColorLight,
+          ),
           const SizedBox(width: 24),
           AnimatedHoverButton(
             onTap: () {
               // <-- LOGOUT TE LLEVA AL HOME
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-            }, 
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
+            },
             baseColor: Colors.transparent,
-            child: const Icon(Icons.logout, color: AppColors.whiteColor, size: 28),
+            child: const Icon(
+              Icons.logout,
+              color: AppColors.whiteColor,
+              size: 28,
+            ),
           ),
         ],
       ),
@@ -118,16 +149,27 @@ class _AnimatedHoverButtonState extends State<AnimatedHoverButton> {
     Color finalColor = widget.baseColor;
     if (widget.baseColor != Colors.transparent) {
       if (_isPressed) {
-        finalColor = Color.alphaBlend(Colors.black.withOpacity(0.2), widget.baseColor);
+        finalColor = Color.alphaBlend(
+          Colors.black.withOpacity(0.2),
+          widget.baseColor,
+        );
       } else if (_isHovered) {
-        finalColor = Color.alphaBlend(Colors.white.withOpacity(0.1), widget.baseColor);
+        finalColor = Color.alphaBlend(
+          Colors.white.withOpacity(0.1),
+          widget.baseColor,
+        );
       }
     }
 
     return MouseRegion(
-      cursor: widget.onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+      cursor: widget.onTap != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
       onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() { _isHovered = false; _isPressed = false; }),
+      onExit: (_) => setState(() {
+        _isHovered = false;
+        _isPressed = false;
+      }),
       child: GestureDetector(
         onTapDown: (_) => setState(() => _isPressed = true),
         onTapUp: (_) {

@@ -1,4 +1,4 @@
-package leo.back.models;
+package leo.back.dto;
 import lombok.*;
 
 @Getter @Setter

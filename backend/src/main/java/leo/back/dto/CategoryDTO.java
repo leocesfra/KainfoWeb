@@ -1,5 +1,6 @@
-package leo.back.models; // o leo.back.dto si creaste la carpeta
+package leo.back.dto; // o leo.back.dto si creaste la carpeta
 
+import leo.back.models.Category;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.List;

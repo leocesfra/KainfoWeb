@@ -1,5 +1,6 @@
 package leo.back.controllers;
 
+import leo.back.dto.ProductCreateDTO;
 import leo.back.models.Product;
 import leo.back.services.ProductService;
 import org.springframework.http.HttpStatus;
@@ -47,9 +48,9 @@ public class ProductController {
 
     // Ruta: POST http://localhost:8080/api/products
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> addProduct(@RequestBody ProductCreateDTO dto) {
         // El @RequestBody es OBLIGATORIO para leer el JSON que envía Flutter
-        Product newProduct = productService.addProduct(product);
+        Product newProduct = productService.addProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 

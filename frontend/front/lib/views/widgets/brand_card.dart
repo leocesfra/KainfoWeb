@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/colors.dart';
+import '../../core/constants/typography.dart';
 
 class BrandCard extends StatelessWidget {
   final String imageName;
@@ -19,27 +19,25 @@ class BrandCard extends StatelessWidget {
           Container(
             width: 88,
             height: 88,
-            color: AppColors.neutralColorLight, // Placeholder si no hay imagen
+            color: AppColors.neutralColorLight,
             child: Image.asset(
-              'images/brands/$imageName',
+              'assets/images/brands/$imageName', // <-- RUTA CORREGIDA
               fit: BoxFit.contain,
-              errorBuilder: (_,_,_) => const Icon(Icons.business, color: AppColors.neutralColorDark),
+              errorBuilder: (_,_,_) => const Center(
+                child: Text('Sin imagen', textAlign: TextAlign.center, style: TextStyle(color: AppColors.neutralColorDark, fontSize: 12, fontWeight: FontWeight.bold))
+              ),
             ),
           ),
           const SizedBox(height: 8),
           
-          // Texto 88x24
+          // Texto
           Container(
             width: 88,
-            height: 24,
             alignment: Alignment.center,
             child: Text(
-              brandName,
-              style: GoogleFonts.roboto(
-                color: AppColors.blackColor,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+              brandName, 
+              textAlign: TextAlign.center, 
+              style: AppTypography.colorBlack.bodyLarge?.copyWith(fontWeight: FontWeight.w500)
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 package leo.back.services;
 
+import leo.back.dto.ProductCreateDTO;
 import leo.back.models.Product;
 
 import java.math.BigDecimal;
@@ -21,7 +22,7 @@ public interface ProductService {
     );
 
     // POST
-    Product addProduct(Product product);
+    Product addProduct(ProductCreateDTO dto);
 
     // PUT
     Product updateProduct(Long id, Product productDetails);

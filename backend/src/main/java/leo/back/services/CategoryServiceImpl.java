@@ -1,6 +1,6 @@
 package leo.back.services;
 
-import leo.back.models.CategoryDTO;
+import leo.back.dto.CategoryDTO;
 import leo.back.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

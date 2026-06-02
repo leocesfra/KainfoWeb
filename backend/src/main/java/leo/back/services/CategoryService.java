@@ -1,7 +1,6 @@
 package leo.back.services;
 
-import leo.back.models.Category;
-import leo.back.models.CategoryDTO;
+import leo.back.dto.CategoryDTO;
 
 import java.util.List;
 

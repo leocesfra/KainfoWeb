@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/core/routes/app_routes.dart';
 import 'package:front/views/screens/product_detail.dart';
 import 'package:front/views/widgets/footer.dart';
 import 'package:front/views/widgets/header.dart';
@@ -115,12 +116,10 @@ class _CatalogScreenState extends State<CatalogScreen> {
                                 price: '${p.price} €',
                                 imageUrl: p.primaryImageUrl,
                                 onTap: () {
-                                  // <-- NAVEGACIÓN A LA FICHA DE PRODUCTO
-                                  Navigator.push(
+                                  Navigator.pushNamed(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProductDetailScreen(product: p), // Le pasamos el modelo completo 'p'
-                                    ),
+                                    AppRoutes.productDetail,
+                                    arguments: p,
                                   );
                                 },
                               );
@@ -218,15 +217,13 @@ class _CatalogScreenState extends State<CatalogScreen> {
                                     title: Text(subCategory.name, style: AppTypography.colorWhite.bodyLarge),
                                     onTap: () {
                                       setState(() => _menuOpen = false);
-                                      // Al hacer clic, navega de nuevo a CatalogScreen con el nuevo ID
-                                      Navigator.pushReplacement(
+                                      Navigator.pushReplacementNamed(
                                         context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CatalogScreen(
-                                            categoryId: subCategory.id.toString(),
-                                            categoryName: subCategory.name,
-                                          ),
-                                        ),
+                                        AppRoutes.catalog,
+                                        arguments: {
+                                          'categoryId': subCategory.id.toString(),
+                                          'categoryName': subCategory.name,
+                                        },
                                       );
                                     },
                                   ),

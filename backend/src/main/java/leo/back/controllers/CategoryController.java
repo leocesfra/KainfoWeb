@@ -1,7 +1,6 @@
 package leo.back.controllers;
 
-import leo.back.models.Category;
-import leo.back.models.CategoryDTO;
+import leo.back.dto.CategoryDTO;
 import leo.back.services.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
