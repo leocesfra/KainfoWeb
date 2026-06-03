@@ -56,6 +56,9 @@ class ProductViewModel extends ChangeNotifier {
         maxPrice: maxPrice,
         dynamicFilters: dynamicFilters,
       );
+
+      _allProducts = List.from(_products);
+
       _setState(ViewState.loaded);
     } catch (e) {
       _errorMessage = e.toString();

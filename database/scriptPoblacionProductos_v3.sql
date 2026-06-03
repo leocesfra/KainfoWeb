@@ -1669,3 +1669,313 @@ INSERT INTO products (name, description, price, stock, sku, category_id, brand_i
     14,
     '{"formato": "65%", "tipo": "Óptico-Mecánico", "switches": "Linear OPX", "conexión": "USB-C"}'
 );
+
+INSERT INTO products (name, description, price, stock, sku, category_id, brand_id, specifications) VALUES 
+-- RATONES (Categoría 33)
+(
+    'HyperX Pulsefire Fuse',
+    'El HyperX Pulsefire Fuse presenta un elegante diseño ambidiestro con paneles con textura de agarre Microline, que combina a la perfección comodidad y control.',
+    32.67,
+    15,
+    'MOUHYPERX-001',
+    33,
+    22,
+    '{"conexión": "Inalámbrico Pila"}'
+),
+(
+    'Logitech G502 HERO',
+    'Equipado con el sensor óptico HERO de última generación para una máxima precisión de seguimiento, peso personalizable y 11 botones totalmente programables.',
+    49.50,
+    40,
+    'MOULOGITECH-001',
+    33,
+    30,
+    '{"conexión": "USB-A"}'
+),
+(
+    'Corsair Harpoon RGB Wireless',
+    'Diseño cómodo y ligero que te permite jugar a la velocidad del rayo mediante una tecnología inalámbrica optimizada inferior a 1 ms.',
+    39.99,
+    25,
+    'MOUCORSAIR-001',
+    33,
+    14,
+    '{"conexión": "Inalámbrico batería"}'
+),
+(
+    'Red Dragon M601 Centrophorus',
+    'Ratón gaming ergonómico con retroiluminación fluida, ajuste de hasta 3200 DPI y un juego de 8 piezas para la regulación de peso según tus preferencias.',
+    22.90,
+    30,
+    'MOURED DRAGON-001',
+    33,
+    38,
+    '{"conexión": "USB-A"}'
+),
+(
+    'Krom Kael Ultra Lightweight',
+    'Estructura de panel de nido de abeja ultraligera que reduce drásticamente el peso del chasis para ofrecer deslizamientos rápidos y sin fatiga.',
+    19.95,
+    18,
+    'MOUKROM-001',
+    33,
+    26,
+    '{"conexión": "USB-C"}'
+),
+(
+    'Logitech MX Master 3S',
+    'Un ratón insignia rediseñado para ofrecer una precisión milimétrica, un desplazamiento electromagnético ultrasilencioso y máxima ergonomía de oficina.',
+    99.99,
+    14,
+    'MOULOGITECH-002',
+    33,
+    30,
+    '{"conexión": "Bluetooth"}'
+),
+(
+    'ASUS ROG Keris Wireless AimPoint',
+    'Ratón gaming inalámbrico superligero de 75 gramos armado con un sensor óptico de 36.000 DPI y switches mecánicos reemplazables.',
+    79.00,
+    12,
+    'MOUASUS-001',
+    33,
+    8,
+    '{"conexión": "Inalámbrico batería"}'
+),
+(
+    'Dell MS116 Legacy Retro',
+    'Ratón óptico básico de oficina con la clásica interfaz de conexión para placas industriales o equipos heredados que requieren compatibilidad total.',
+    12.50,
+    50,
+    'MOUDELL-001',
+    33,
+    17,
+    '{"conexión": "PS2"}'
+),
+(
+    'Corsair Dark Core RGB Pro',
+    'Te ayuda a ganar sin cables gracias a sus tres formas de conexión, agarres laterales intercambiables y tecnología de carga inalámbrica Qi.',
+    89.99,
+    8,
+    'MOUCORSAIR-002',
+    33,
+    14,
+    '{"conexión": "USB-C"}'
+),
+(
+    'HyperX Pulsefire Haste 2',
+    'Cuenta con una sólida carcasa superior ultraligera que mantiene el rendimiento y la durabilidad estructural intactos para movimientos rápidos.',
+    59.99,
+    20,
+    'MOUHYERX-002',
+    33,
+    22,
+    '{"conexión": "USB-A"}'
+);
+
+INSERT INTO products (name, description, price, stock, sku, category_id, brand_id, specifications) VALUES 
+-- AURICULARES (Categoría 34)
+(
+    'HyperX Cloud III Wireless',
+    'Los HyperX Cloud III Wireless añaden un capítulo más a la leyenda de los Cloud II. Esta evolución inalámbrica conserva el alma de los Cloud II Wireless, pero ahora incorporan últimas tecnologías y un diseño nuevo y espectacular.',
+    45.67,
+    15,
+    'HEADHYPERX-001',
+    34,
+    22,
+    '{"conexion": "Inalámbrico batería", "microfono": true}'
+),
+(
+    'Logitech G435 Lightspeed',
+    'Auriculares inalámbricos ultra ligeros diseñados para el juego competitivo y el uso diario, con conectividad de baja latencia y materiales reciclados.',
+    69.99,
+    25,
+    'HEADLOGITECH-001',
+    34,
+    30,
+    '{"conexion": "Inalámbrico batería", "microfono": true}'
+),
+(
+    'Corsair HS55 Stereo USB',
+    'Ofrecen una comodidad esencial durante todo el día y una gran calidad de sonido gracias a sus transductores de audio de neodimio de 50 mm ajustados a medida.',
+    54.90,
+    18,
+    'HEADCORSAIR-001',
+    34,
+    14,
+    '{"conexion": "USB-A" , "microfono": true}'
+),
+(
+    'Red Dragon H510 Zeus-X RGB',
+    'Auriculares envolventes 7.1 con almohadillas de espuma viscoelástica premium e iluminación RGB integrada para destacar en tus transmisiones en directo.',
+    49.99,
+    20,
+    'HEADRED DRAGON-001',
+    34,
+    38,
+    '{"conexion": "USB-C", "microfono": true}'
+),
+(
+    'Krom Kyus Gaming Headset',
+    'Diseño robusto con diadema suspendida ajustable y un micrófono flexible que garantiza una comunicación nítida con tus compañeros de escuadrón.',
+    24.95,
+    30,
+    'HEADKROM-001',
+    34,
+    26,
+    '{"conexion": "USB-A", "microfono": true}'
+),
+(
+    'ASUS ROG Cetra True Wireless',
+    'Auriculares intraurales gaming dotados de tecnología de cancelación activa de ruido (ANC) y conexiones inalámbricas optimizadas para evitar retrasos en el audio.',
+    89.00,
+    12,
+    'HEADASUS-001',
+    34,
+    8,
+    '{"conexion": "Bluetooth", "microfono": true}'
+),
+(
+    'MSI Immerse GH50 Wireless',
+    'Sumérgete por completo en el campo de batalla con vibración mejorada por software y una batería de larga duración idónea para maratones de juego.',
+    79.99,
+    10,
+    'HEADMSI-001',
+    34,
+    31,
+    '{"conexion": "Inalámbrico batería", "microfono": true}'
+),
+(
+    'Logitech Zone Wireless 2',
+    'Auriculares empresariales y multimedia premium con cancelación de ruido excepcional de nivel profesional, diseñados para trabajar desde cualquier lugar.',
+    199.00,
+    7,
+    'HEADLOGITECH-002',
+    34,
+    30,
+    '{"conexion": "Bluetooth", "microfono": true}'
+),
+(
+    'Corsair Virtuoso RGB Wireless SE',
+    'Ofrecen una experiencia de sonido de alta fidelidad impecable, comodidad extrema gracias a sus almohadillas premium y una conectividad inalámbrica ultrarrápida.',
+    165.50,
+    5,
+    'HEADCORSAIR-002',
+    34,
+    14,
+    '{"conexion": "USB-C", "microfono": true}'
+),
+(
+    'Apple AirPods Max (Legacy Config)',
+    'Auriculares de diadema que reinventan el sector del audio de alta fidelidad, configurados para la monitorización multimedia básica sin captación de voz activa.',
+    499.00,
+    4,
+    'HEADAPPLE-001',
+    34,
+    5,
+    '{"conexion": "Bluetooth", "microfono": false}'
+);
+
+INSERT INTO products (name, description, price, stock, sku, category_id, brand_id, specifications) VALUES 
+-- PORTÁTILES (Categoría 41)
+(
+    'Lenovo ThinkPad E16 Gen 4',
+    'Impulsa la productividad empresarial diaria con el portátil de 16” Lenovo ThinkPad E16 de 4ª generación con procesadores Intel® Core™ Ultra serie 3. Las experiencias Copilot+ más Smart y una unidad de procesamiento neuronal (NPU) avanzada hacen que la IA del dispositivo sea más rápida y eficiente, para que puedas realizar multitarea sin problemas, proteger los datos confidenciales y hacer más con menos esfuerzo.',
+    1450.98,
+    40,
+    'LAPLENOVO-001',
+    41,
+    27,
+    '{"fabricante_cpu": "Intel", "generación_cpu": "Intel Core Ultra Serie 3", "familia_cpu": "Intel Core Ultra 5", "gpu": "Integrada", "familia_gpu": "Intel Graphics Xe3 2", "ram": 16, "disco": 256, "puertos": ["USB 3.2 Gen 1", "Ethernet", "HDMI 2.1", "USB-C", "USB 3.2 Gen 2"], "tamaño": 16, "panel": "IPS", "resolucion": "1920 x 1200"}'
+),
+(
+    'ASUS TUF Gaming A15',
+    'Portátil diseñado para ofrecer una gran durabilidad y un rendimiento de juego fluido en alta definición. Equipado con un potente procesador AMD Ryzen y una tarjeta gráfica dedicada de la serie RTX 40 para exprimir los últimos títulos del mercado con DLSS 3.',
+    949.00,
+    15,
+    'LAPASUS-001',
+    41,
+    8,
+    '{"fabricante_cpu": "AMD", "generación_cpu": "Ryzen Zen 4", "familia_cpu": "Ryzen 7 7735HS", "gpu": "Dedicada", "familia_gpu": "NVIDIA RTX 4060", "ram": 16, "disco": 512, "puertos": ["HDMI 2.1", "USB-C", "USB 3.2", "Audio Jack"], "tamaño": 15.6, "panel": "IPS", "resolucion": "1920 x 1080"}'
+),
+(
+    'Apple MacBook Air 13 M3',
+    'Sorprendentemente fino y rápido. El nuevo MacBook Air con chip M3 aprovecha la potencia de su motor neuronal para tareas avanzadas de inteligencia artificial móvil, ofreciendo un diseño de aluminio 100% reciclado sin ventiladores y con hasta 18 horas de autonomía.',
+    1299.00,
+    12,
+    'LAPAPPLE-001',
+    41,
+    5,
+    '{"fabricante_cpu": "Apple", "generación_cpu": "Apple Silicon M3", "familia_cpu": "Apple M3", "gpu": "Integrada", "familia_gpu": "Apple M3 GPU 8-Core", "ram": 8, "disco": 256, "puertos": ["Thunderbolt 4", "MagSafe 3", "Audio Jack"], "tamaño": 13.6, "panel": "Liquid Retina", "resolucion": "2560 x 1664"}'
+),
+(
+    'HP Victus 16-s0015ns',
+    'La máquina perfecta para jugadores y creadores de contenido que buscan una pantalla de formato expandido con alta tasa de refresco. El sistema de flujo de aire optimizado mantiene las frecuencias estables incluso durante cargas prolongadas de renderizado.',
+    849.50,
+    18,
+    'LAPHP-001',
+    41,
+    21,
+    '{"fabricante_cpu": "AMD", "generación_cpu": "Ryzen Zen 4", "familia_cpu": "Ryzen 5 7640HS", "gpu": "Dedicada", "familia_gpu": "NVIDIA RTX 4050", "ram": 16, "disco": 512, "puertos": ["USB-C", "USB 3.2 Gen 1", "HDMI 2.1", "Ethernet"], "tamaño": 16.1, "panel": "IPS", "resolucion": "1920 x 1080"}'
+),
+(
+    'MSI Cyborg 15 A12V',
+    'Incorpora un rompedor diseño translúcido de estética Cyberpunk en el chasis que te permite ver las entrañas mecánicas de tu ordenador de juego, combinado con un teclado retroiluminado azul eléctrico y un hardware balanceado para presupuestos ajustados.',
+    799.00,
+    10,
+    'LAPMSI-001',
+    41,
+    31,
+    '{"fabricante_cpu": "Intel", "generación_cpu": "Intel 12a Gen", "familia_cpu": "Intel Core i7-12650H", "gpu": "Dedicada", "familia_gpu": "NVIDIA RTX 4060", "ram": 16, "disco": 1024, "puertos": ["USB-C 3.2", "USB 3.2 Gen 1", "HDMI 2.1", "Ethernet"], "tamaño": 15.6, "panel": "IPS", "resolucion": "1920 x 1080"}'
+),
+(
+    'Acer Aspire 3 A315',
+    'Un portátil funcional diseñado para las tareas informáticas diarias de estudiantes y entornos domésticos. Su procesador optimizado de bajo consumo asegura un funcionamiento silencioso, navegación web fluida y una óptima reproducción multimedia.',
+    389.00,
+    25,
+    'LAPACER-001',
+    41,
+    1,
+    '{"fabricante_cpu": "Intel", "generación_cpu": "Intel Core i3 N-Series", "familia_cpu": "Intel Core i3-N305", "gpu": "Integrada", "familia_gpu": "Intel UHD Graphics", "ram": 8, "disco": 512, "puertos": ["HDMI 2.1", "USB 3.2", "USB-C"], "tamaño": 15.6, "panel": "LED", "resolucion": "1920 x 1080"}'
+),
+(
+    'Dell XPS 14 9440',
+    'La cumbre de la sofisticación e ingeniería en portátiles premium de productividad. Fabricado en aluminio mecanizado CNC y cristal Gorilla Glass, cuenta con una pantalla infinita y un panel táctil invisible con respuesta háptica avanzada.',
+    1899.00,
+    5,
+    'LAPDELL-001',
+    41,
+    17,
+    '{"fabricante_cpu": "Intel", "generación_cpu": "Intel Core Ultra Serie 1", "familia_cpu": "Intel Core Ultra 7 155H", "gpu": "Dedicada", "familia_gpu": "NVIDIA RTX 4050", "ram": 32, "disco": 1024, "puertos": ["Thunderbolt 4", "MicroSD Card Slot", "Audio Jack"], "tamaño": 14.5, "panel": "OLED Táctil", "resolucion": "3200 x 2000"}'
+),
+(
+    'Gigabyte G5 KF',
+    'Portátil multitarea liviano que ofrece el balance perfecto entre juego, entretenimiento y espacio de trabajo, permitiendo conectar hasta tres pantallas externas gracias a su completa matriz de conexiones de vídeo traseras y laterales.',
+    749.00,
+    14,
+    'LAPGIGABYTE-001',
+    41,
+    20,
+    '{"fabricante_cpu": "Intel", "generación_cpu": "Intel 12a Gen", "familia_cpu": "Intel Core i5-12500H", "gpu": "Dedicada", "familia_gpu": "NVIDIA RTX 4060", "ram": 16, "disco": 512, "puertos": ["Mini DisplayPort", "HDMI", "USB-C", "USB 3.2", "Ethernet"], "tamaño": 15.6, "panel": "IPS", "resolucion": "1920 x 1080"}'
+),
+(
+    'Lenovo IdeaPad Slim 3',
+    'Haz que tus desplazamientos diarios sean más sencillos con una estructura un 10% más delgada que la generación anterior. Ofrece una robusta seguridad integrada con obturador de privacidad físico en la cámara web y carga rápida de batería.',
+    529.00,
+    22,
+    'LAPLENOVO-002',
+    41,
+    27,
+    '{"fabricante_cpu": "AMD", "generación_cpu": "Ryzen 7000 Series", "familia_cpu": "Ryzen 5 7520U", "gpu": "Integrada", "familia_gpu": "AMD Radeon 610M", "ram": 16, "disco": 512, "puertos": ["USB-C", "USB 3.2 Gen 1", "HDMI 1.4b", "Audio Jack"], "tamaño": 15.6, "panel": "IPS", "resolucion": "1920 x 1080"}'
+),
+(
+    'ASUS ROG Zephyrus G16',
+    'Portátil definitivo para entusiastas del gaming y la edición profesional en un chasis ultradelgado. Equipado con una pantalla OLED ROG Nebula espectacular que ofrece negros perfectos, viveza cromática incomparable y tasas de refresco competitivas.',
+    2399.00,
+    3,
+    'LAPASUS-002',
+    41,
+    8,
+    '{"fabricante_cpu": "Intel", "generación_cpu": "Intel Core Ultra Serie 1", "familia_cpu": "Intel Core Ultra 9 185H", "gpu": "Dedicada", "familia_gpu": "NVIDIA RTX 4070", "ram": 32, "disco": 2048, "puertos": ["Thunderbolt 4", "HDMI 2.1", "USB 3.2 Gen 2", "SD Express Card"], "tamaño": 16, "panel": "OLED", "resolucion": "2560 x 1600"}'
+);
+

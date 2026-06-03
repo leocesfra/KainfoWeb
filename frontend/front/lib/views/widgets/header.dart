@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:front/viewmodels/cart_viewmodel.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/colors.dart';
 import '../../core/constants/typography.dart';
 import '../../core/routes/app_routes.dart';
@@ -83,22 +85,35 @@ class _HeaderWidgetState extends State<HeaderWidget> {
           const SizedBox(width: 24),
 
           // 6. Carrito con Badge de Engranaje (Rojo primaryColorLight)
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              const Icon(Icons.shopping_cart, color: AppColors.whiteColor, size: 28),
-              Positioned(
-                top: -8,
-                right: -8,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    const Icon(Icons.settings, color: AppColors.primaryColorLight, size: 22),
-                    const Text('0', style: TextStyle(color: AppColors.whiteColor, fontSize: 10, fontWeight: FontWeight.bold)),
-                  ],
+          // 6. Carrito con Badge de Engranaje
+          InkWell(
+            onTap: () => Navigator.pushNamed(context, AppRoutes.cart), // Navega a la cesta
+            mouseCursor: SystemMouseCursors.click,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                const Icon(Icons.shopping_cart, color: AppColors.whiteColor, size: 28),
+                Positioned(
+                  top: -8,
+                  right: -8,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const Icon(Icons.settings, color: AppColors.primaryColorLight, size: 22),
+                      // CONSUME EL CONTADOR REAL
+                      Consumer<CartViewModel>(
+                        builder: (context, cart, child) {
+                          return Text(
+                            '${cart.itemCount}',
+                            style: const TextStyle(color: AppColors.whiteColor, fontSize: 10, fontWeight: FontWeight.bold),
+                          );
+                        }
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

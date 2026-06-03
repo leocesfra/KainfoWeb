@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/views/screens/cart.dart';
 import '../../data/models/product_model.dart';
 import '../../views/screens/home.dart';
 import '../../views/screens/catalog.dart';
@@ -15,19 +16,20 @@ class AppRoutes {
   static const String login = '/login';
   static const String adminHome = '/admin_home';
   static const String adminAddProduct = '/admin_add_producto';
+  static const String cart = '/cart';
 
   // Generador de rutas
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
-      
+
       case login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
-      
+
       case adminHome:
         return MaterialPageRoute(builder: (_) => const AdminHomeScreen());
-      
+
       case catalog:
         // Recibe los argumentos como un Mapa
         final args = settings.arguments as Map<String, String>;
@@ -37,21 +39,24 @@ class AppRoutes {
             categoryName: args['categoryName']!,
           ),
         );
-      
+
       case productDetail:
         // Recibe el objeto ProductModel completo
         final product = settings.arguments as ProductModel;
         return MaterialPageRoute(
           builder: (_) => ProductDetailScreen(product: product),
         );
-      
+
       case adminAddProduct:
         // Puede recibir null (crear) o un producto (editar)
         final product = settings.arguments as ProductModel?;
         return MaterialPageRoute(
           builder: (_) => AdminProductAddScreen(productToEdit: product),
         );
-      
+
+      case cart:
+        return MaterialPageRoute(builder: (_) => const CartScreen());
+
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
     }

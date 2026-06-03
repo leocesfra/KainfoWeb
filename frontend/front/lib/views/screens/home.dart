@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/viewmodels/cart_viewmodel.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -54,36 +55,72 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Column(
             children: [
-              HeaderWidget(onCategoryTap: () => setState(() => _menuOpen = !_menuOpen)),
+              HeaderWidget(
+                onCategoryTap: () => setState(() => _menuOpen = !_menuOpen),
+              ),
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 32,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // TÍTULO: Novedades (INICIO DIRECTO SIN BANNER)
-                        Text('Novedades', style: AppTypography.colorBlack.headlineLarge),
+                        Text(
+                          'Novedades',
+                          style: AppTypography.colorBlack.headlineLarge,
+                        ),
                         const SizedBox(height: 24),
 
                         // CARRUSEL (Altura ampliada a 380 para evitar overflow)
                         Consumer<ProductViewModel>(
                           builder: (context, viewModel, child) {
                             if (viewModel.state == ViewState.loading) {
-                              return const SizedBox(height: 380, child: Center(child: CircularProgressIndicator()));
+                              return const SizedBox(
+                                height: 380,
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
                             }
                             if (viewModel.products.isEmpty) {
-                              return const SizedBox(height: 380, child: Center(child: Text('No hay productos', style: TextStyle(fontSize: 24))));
+                              return const SizedBox(
+                                height: 380,
+                                child: Center(
+                                  child: Text(
+                                    'No hay productos',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                ),
+                              );
                             }
 
                             // Agrupar productos dinámicamente
                             final products = viewModel.products;
                             List<List<ProductModel>> chunks = [];
-                            for (var i = 0; i < products.length; i += itemsPerPage) {
-                              chunks.add(products.sublist(i, i + itemsPerPage > products.length ? products.length : i + itemsPerPage));
+                            for (
+                              var i = 0;
+                              i < products.length;
+                              i += itemsPerPage
+                            ) {
+                              chunks.add(
+                                products.sublist(
+                                  i,
+                                  i + itemsPerPage > products.length
+                                      ? products.length
+                                      : i + itemsPerPage,
+                                ),
+                              );
                             }
-                            
-                            if (chunks.length > 3) chunks = chunks.sublist(0, 3); // Límite de 3 páginas para los 3 iconos
+
+                            if (chunks.length > 3)
+                              chunks = chunks.sublist(
+                                0,
+                                3,
+                              ); // Límite de 3 páginas para los 3 iconos
 
                             return Column(
                               children: [
@@ -91,10 +128,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     // Flecha Izquierda
                                     IconButton(
-                                      icon: const Icon(Icons.keyboard_double_arrow_left, size: 40, color: AppColors.neutralColorDark),
+                                      icon: const Icon(
+                                        Icons.keyboard_double_arrow_left,
+                                        size: 40,
+                                        color: AppColors.neutralColorDark,
+                                      ),
                                       onPressed: () {
                                         if (_currentCarouselPage > 0) {
-                                          _carouselController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                                          _carouselController.previousPage(
+                                            duration: const Duration(
+                                              milliseconds: 300,
+                                            ),
+                                            curve: Curves.easeInOut,
+                                          );
                                         }
                                       },
                                     ),
@@ -104,17 +150,51 @@ class _HomeScreenState extends State<HomeScreen> {
                                         height: 380, // <-- ALTURA AMPLIADA AQUÍ
                                         child: PageView.builder(
                                           controller: _carouselController,
-                                          onPageChanged: (index) => setState(() => _currentCarouselPage = index),
+                                          onPageChanged: (index) => setState(
+                                            () => _currentCarouselPage = index,
+                                          ),
                                           itemCount: chunks.length,
                                           itemBuilder: (context, pageIndex) {
                                             return Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: chunks[pageIndex].map((p) {
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: chunks[pageIndex].map((
+                                                p,
+                                              ) {
                                                 return ProductCard(
                                                   title: p.name,
                                                   price: '${p.price} €',
                                                   imageUrl: p.primaryImageUrl,
-                                                  onTap: () => Navigator.pushNamed(context, AppRoutes.productDetail, arguments: p),
+                                                  onTap: () =>
+                                                      Navigator.pushNamed(
+                                                        context,
+                                                        AppRoutes.productDetail,
+                                                        arguments: p,
+                                                      ),
+
+                                                  // <-- AÑADE ESTO:
+                                                  onAddToCart: () {
+                                                    context
+                                                        .read<CartViewModel>()
+                                                        .addItem(
+                                                          p,
+                                                        ); // 'p' es el ProductModel
+                                                    ScaffoldMessenger.of(
+                                                      context,
+                                                    ).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                          '${p.name} añadido a la cesta',
+                                                        ),
+                                                        backgroundColor:
+                                                            Colors.green,
+                                                        duration:
+                                                            const Duration(
+                                                              seconds: 1,
+                                                            ),
+                                                      ),
+                                                    );
+                                                  },
                                                 );
                                               }).toList(),
                                             );
@@ -124,36 +204,59 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     // Flecha Derecha
                                     IconButton(
-                                      icon: const Icon(Icons.keyboard_double_arrow_right, size: 40, color: AppColors.neutralColorDark),
+                                      icon: const Icon(
+                                        Icons.keyboard_double_arrow_right,
+                                        size: 40,
+                                        color: AppColors.neutralColorDark,
+                                      ),
                                       onPressed: () {
-                                        if (_currentCarouselPage < chunks.length - 1) {
-                                          _carouselController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                                        if (_currentCarouselPage <
+                                            chunks.length - 1) {
+                                          _carouselController.nextPage(
+                                            duration: const Duration(
+                                              milliseconds: 300,
+                                            ),
+                                            curve: Curves.easeInOut,
+                                          );
                                         }
                                       },
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 16),
-                                
+
                                 // Paginación: 3 Engranajes
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: List.generate(3, (index) {
-                                    bool isActive = _currentCarouselPage == index;
-                                    if (index >= chunks.length && chunks.isNotEmpty) return const SizedBox.shrink();
-                                    
+                                    bool isActive =
+                                        _currentCarouselPage == index;
+                                    if (index >= chunks.length &&
+                                        chunks.isNotEmpty)
+                                      return const SizedBox.shrink();
+
                                     return MouseRegion(
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
                                         onTap: () {
-                                          _carouselController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                                          _carouselController.animateToPage(
+                                            index,
+                                            duration: const Duration(
+                                              milliseconds: 300,
+                                            ),
+                                            curve: Curves.easeInOut,
+                                          );
                                         },
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                          ),
                                           child: Icon(
                                             Icons.settings,
                                             size: 24,
-                                            color: isActive ? AppColors.primaryColorLight : AppColors.neutralColorDark,
+                                            color: isActive
+                                                ? AppColors.primaryColorLight
+                                                : AppColors.neutralColorDark,
                                           ),
                                         ),
                                       ),
@@ -168,7 +271,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 64),
 
                         // TÍTULO: Nuestras Marcas
-                        Text('Nuestras marcas', style: AppTypography.colorBlack.headlineLarge),
+                        Text(
+                          'Nuestras marcas',
+                          style: AppTypography.colorBlack.headlineLarge,
+                        ),
                         const SizedBox(height: 24),
 
                         // FILA MARCAS (Usamos Wrap por si la pantalla se hace pequeña, no de error)
@@ -177,11 +283,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           runSpacing: 24,
                           alignment: WrapAlignment.spaceEvenly,
                           children: [
-                            BrandCard(brandName: 'Logitech', imageName: 'frontend/front/assets/images/brands/logitech.png'),
-                            BrandCard(brandName: 'Kingston', imageName: 'frontend/front/assets/images/brands/kingston.png'),
-                            BrandCard(brandName: 'Primux', imageName: 'frontend/front/assets/images/brands/primux.png'),
-                            BrandCard(brandName: 'aqprox', imageName: 'frontend/front/assets/images/brands/aqprox.png'),
-                            BrandCard(brandName: 'HP', imageName: 'frontend/front/assets/images/brands/hp.png'),
+                            BrandCard(
+                              brandName: 'Logitech',
+                              imageName:
+                                  'frontend/front/assets/images/brands/logitech.png',
+                            ),
+                            BrandCard(
+                              brandName: 'Kingston',
+                              imageName:
+                                  'frontend/front/assets/images/brands/kingston.png',
+                            ),
+                            BrandCard(
+                              brandName: 'Primux',
+                              imageName:
+                                  'frontend/front/assets/images/brands/primux.png',
+                            ),
+                            BrandCard(
+                              brandName: 'aqprox',
+                              imageName:
+                                  'frontend/front/assets/images/brands/aqprox.png',
+                            ),
+                            BrandCard(
+                              brandName: 'HP',
+                              imageName:
+                                  'frontend/front/assets/images/brands/hp.png',
+                            ),
                           ],
                         ),
                       ],
@@ -222,34 +348,63 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Consumer<CategoryViewModel>(
                   builder: (context, viewModel, child) {
                     if (viewModel.state == CategoryViewState.loading) {
-                      return const Center(child: CircularProgressIndicator(color: AppColors.whiteColor));
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.whiteColor,
+                        ),
+                      );
                     }
                     if (viewModel.categories.isEmpty) {
-                      return const Center(child: Text('Sin categorías', style: TextStyle(color: AppColors.whiteColor)));
+                      return const Center(
+                        child: Text(
+                          'Sin categorías',
+                          style: TextStyle(color: AppColors.whiteColor),
+                        ),
+                      );
                     }
                     return ListView.builder(
                       itemCount: viewModel.categories.length,
                       itemBuilder: (context, index) {
                         final category = viewModel.categories[index];
                         return Theme(
-                          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                          data: Theme.of(
+                            context,
+                          ).copyWith(dividerColor: Colors.transparent),
                           child: ExpansionTile(
                             iconColor: AppColors.whiteColor,
                             collapsedIconColor: AppColors.whiteColor,
-                            leading: const Icon(Icons.memory, color: AppColors.whiteColor),
-                            title: Text(category.name, style: GoogleFonts.leagueSpartan(color: AppColors.whiteColor, fontSize: 20, fontWeight: FontWeight.w600)),
+                            leading: const Icon(
+                              Icons.memory,
+                              color: AppColors.whiteColor,
+                            ),
+                            title: Text(
+                              category.name,
+                              style: GoogleFonts.leagueSpartan(
+                                color: AppColors.whiteColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                             children: category.subCategories.map((subCategory) {
                               return Material(
                                 color: Colors.transparent,
                                 child: ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 72),
-                                  title: Text(subCategory.name, style: AppTypography.colorWhite.bodyLarge),
+                                  contentPadding: const EdgeInsets.only(
+                                    left: 72,
+                                  ),
+                                  title: Text(
+                                    subCategory.name,
+                                    style: AppTypography.colorWhite.bodyLarge,
+                                  ),
                                   onTap: () {
                                     setState(() => _menuOpen = false);
                                     Navigator.pushNamed(
                                       context,
                                       AppRoutes.catalog,
-                                      arguments: {'categoryId': subCategory.id.toString(), 'categoryName': subCategory.name},
+                                      arguments: {
+                                        'categoryId': subCategory.id.toString(),
+                                        'categoryName': subCategory.name,
+                                      },
                                     );
                                   },
                                 ),
