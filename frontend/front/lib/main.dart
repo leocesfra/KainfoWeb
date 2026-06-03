@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front/core/routes/app_routes.dart';
+import 'package:front/data/repositories/brand_repository.dart';
 import 'package:front/data/repositories/category_repository.dart';
+import 'package:front/viewmodels/brand_viewmodel.dart';
 import 'package:front/viewmodels/cart_viewmodel.dart';
 import 'package:front/viewmodels/category_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +31,10 @@ void main() {
           create: (_) => CategoryViewModel(categoryRepository),
         ),
         ChangeNotifierProvider(create: (_) => CartViewModel()
-        ), // Añade esta línea
+        ), 
+        ChangeNotifierProvider(
+          create: (_) => BrandViewModel(BrandRepository()), // <-- AÑADIR ESTA LÍNEA
+        ),
       ],
       child: const MyApp(),
     ),

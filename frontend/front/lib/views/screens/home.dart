@@ -286,27 +286,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             BrandCard(
                               brandName: 'Logitech',
                               imageName:
-                                  'frontend/front/assets/images/brands/logitech.png',
-                            ),
-                            BrandCard(
-                              brandName: 'Kingston',
-                              imageName:
-                                  'frontend/front/assets/images/brands/kingston.png',
+                                  'frontend/front/assets/images/logitech.png',
                             ),
                             BrandCard(
                               brandName: 'Primux',
                               imageName:
-                                  'frontend/front/assets/images/brands/primux.png',
-                            ),
-                            BrandCard(
-                              brandName: 'aqprox',
-                              imageName:
-                                  'frontend/front/assets/images/brands/aqprox.png',
+                                  'frontend/front/assets/images/primux.png',
                             ),
                             BrandCard(
                               brandName: 'HP',
                               imageName:
-                                  'frontend/front/assets/images/brands/hp.png',
+                                  'frontend/front/assets/images/hp.png',
                             ),
                           ],
                         ),

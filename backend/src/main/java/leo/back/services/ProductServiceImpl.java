@@ -49,6 +49,8 @@ public class ProductServiceImpl implements ProductService{
         product.setStock(dto.getStock());
         product.setCategory(dto.getCategory());
         product.setSpecifications(dto.getSpecifications());
+        product.setSku(dto.getSku());
+        product.setBrand(dto.getBrand());
 
         // Convertimos las URLs de Flutter a Objetos ProductImage
         if (dto.getGalleryImages() != null && !dto.getGalleryImages().isEmpty()) {
@@ -83,6 +85,7 @@ public class ProductServiceImpl implements ProductService{
             existingProduct.setBrand(productDetails.getBrand());
             existingProduct.setCategory(productDetails.getCategory());
             existingProduct.setSpecifications(productDetails.getSpecifications());
+
 
             // Guardamos los cambios
             return productRepository.save(existingProduct);

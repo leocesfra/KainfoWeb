@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:front/data/models/brand_model.dart';
+import 'package:front/viewmodels/brand_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -27,9 +29,12 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   final _priceController = TextEditingController();
+  final _skuController = TextEditingController();
+
   int? _selectedParentCategoryId;
   int? _selectedSubCategoryId;
-  bool _isLoading = false; // <-- AÑADE ESTA VARIABLE
+  int? _selectedBrandId;
+  bool _isLoading = false;
 
   List<TextEditingController> _imageUrlControllers = [TextEditingController()];
 
@@ -38,15 +43,67 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
 
   // Diccionario simulado de atributos por categoría
   final Map<String, List<String>> _categorySpecsTemplate = {
-    'Procesadores': ['SOCKET', 'GEN', 'MODELO', 'NÚCLEOS', 'GPU INTEGRADA'],
-    'Placas Base': ['SOCKET', 'CHIPSET', 'TAMAÑO', 'RAM MAX', 'WIFI'],
-    'Memoria RAM': ['CAPACIDAD', 'TIPO', 'VELOCIDAD', 'LATENCIA', 'VOLTAJE'],
-    'Tarjetas Gráficas': [
-      'CHIP',
-      'VRAM',
-      'TIPO MEMORIA',
-      'LONGITUD',
-      'CONSUMO',
+    'PROCESADORES': ['socket', 'gen', 'modelo', 'núcleos', 'gpu_integrada'],
+    'PLACAS BASE': ['socket', 'chipset', 'factor_forma', 'wifi', 'lan'],
+    'TARJETAS GRÁFICAS': [
+      'ensamblador',
+      'serie',
+      'modelo',
+      'memoria',
+      'num_ventiladores',
+    ],
+    'MEMORIAS RAM': [
+      'familia',
+      'formato',
+      'cantidad',
+      'kits',
+      'velocidad',
+      'latencia',
+    ],
+    'DISCOS DUROS': [
+      'formato',
+      'tamaño',
+      'capacidad',
+    ], // Ajusta el nombre de la categoría si es distinto
+    'FUENTES DE ALIMENTACIÓN': [
+      'potencia',
+      'eficiencia',
+      'modularidad',
+      'formato',
+    ], // Ajusta el nombre de la categoría si es distinto
+    'CAJAS Y TORRES': [
+      'formato',
+      'color',
+      'num_ventiladores_incluidos',
+      'fuente_incluida',
+    ], // Ajusta el nombre de la categoría si es distinto
+    'VENTILADORES': ['tamaño', 'conexion'],
+    'MONITORES': [
+      'tamaño',
+      'resolucion',
+      'panel',
+      'max_hercios',
+      'respuesta',
+      'sincronizacion_vertical',
+      'curvo',
+      'ajustable_altura',
+      'táctil',
+    ],
+    'TECLADOS': ['formato', 'tipo', 'switches', 'conexión'],
+    'RATONES': ['conexión'],
+    'AURICULARES': ['conexion', 'microfono'],
+    'TODOS LOS PORTATILES': [
+      'fabricante_cpu',
+      'generación_cpu',
+      'familia_cpu',
+      'gpu',
+      'familia_gpu',
+      'ram',
+      'disco',
+      'puertos',
+      'tamaño',
+      'panel',
+      'resolucion',
     ],
   };
 
@@ -55,10 +112,8 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CategoryViewModel>().fetchCategories();
+      context.read<BrandViewModel>().fetchBrands(); // <-- AÑADIR ESTA LÍNEA
     });
-
-    // Inicializamos con especificaciones por defecto
-    _updateSpecsForCategory('Procesadores');
 
     if (widget.productToEdit != null) {
       final p = widget.productToEdit!;
@@ -87,8 +142,12 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
 
   // Método para actualizar los campos según la categoría
   void _updateSpecsForCategory(String categoryName) {
+    // Normalizamos el string a mayúsculas para evitar fallos de coincidencia
+    final normalizedCategory = categoryName.trim().toUpperCase();
+
+    // Buscamos las especificaciones. Si no existe, usamos el fallback.
     final specs =
-        _categorySpecsTemplate[categoryName] ??
+        _categorySpecsTemplate[normalizedCategory] ??
         ['MARCA', 'MODELO', 'COLOR', 'PESO'];
 
     // Guardamos los valores antiguos por si cambiamos de categoría y coinciden claves (ej. MARCA)
@@ -102,7 +161,7 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
     }
     _specControllers.clear();
 
-    // Creamos los nuevos
+    // Creamos los nuevos dinámicamente
     for (var spec in specs) {
       _specControllers[spec] = TextEditingController(
         text: oldValues[spec] ?? '',
@@ -115,6 +174,7 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
     _nameController.dispose();
     _descController.dispose();
     _priceController.dispose();
+    _skuController.dispose();
     for (var c in _imageUrlControllers) {
       c.dispose();
     }
@@ -248,18 +308,13 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
         final Map<String, dynamic> productPayload = {
           'name': _nameController.text.trim(),
           'description': _descController.text.trim(),
-          // Reemplazamos la coma por punto para el double de Dart
-          'price':
-              double.tryParse(_priceController.text.replaceAll(',', '.')) ??
-              0.0,
-          'stock':
-              10, // Stock por defecto (no incluimos campo en el diseño web)
-          'category': {
-            'id': _selectedSubCategoryId,
-          }, // Relación con la tabla categorías
-          // 'brand': { 'id': 1 }, // TODO: Si tienes marcas, enviar así
-          'specifications': specs, // Esto llega al back como JSON o Map
-          'galleryImages': images, // Ojo a cómo mapeas las imágenes en el Back
+          'price': double.tryParse(_priceController.text.replaceAll(',', '.')) ?? 0.0,
+          'stock': 10, 
+          'sku': _skuController.text.trim(), 
+          'category': { 'id': _selectedSubCategoryId }, 
+          'brand': { 'id': _selectedBrandId }, 
+          'specifications': specs, 
+          'galleryImages': images, 
         };
 
         // 5. Petición POST al Servidor
@@ -330,6 +385,25 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
         .where((c) => c.id == _selectedParentCategoryId)
         .firstOrNull;
     final subCategories = selectedParent?.subCategories ?? [];
+
+    // --- NUEVO: CONSUMIR MARCAS REALES DEL VIEWMODEL ---
+    final brandViewModel = context.watch<BrandViewModel>();
+    final allBrands = brandViewModel.brands;
+    
+    List<BrandModel> filteredBrands = List.from(allBrands);
+
+    // FILTRO DINÁMICO
+    if (_selectedSubCategoryId != null) {
+      final selectedCategoryName = subCategories.firstWhere((c) => c.id == _selectedSubCategoryId).name.toUpperCase();
+      
+      if (selectedCategoryName == 'PROCESADORES') {
+        filteredBrands = allBrands.where((b) => ['AMD', 'INTEL'].contains(b.name.toUpperCase())).toList();
+      } else if (selectedCategoryName == 'PLACAS BASES' || selectedCategoryName == 'GRÁFICAS') {
+        filteredBrands = allBrands.where((b) => ['MSI', 'ASUS', 'GIGABYTE', 'ZOTAC', 'SAPPHIRE', 'PNY', 'AMD'].contains(b.name.toUpperCase())).toList();
+      } else if (selectedCategoryName == 'MEMORIAS RAM') { // Ajustado a tu nombre exacto
+        filteredBrands = allBrands.where((b) => ['CORSAIR', 'G.SKILL', 'PATRIOT'].contains(b.name.toUpperCase())).toList();
+      }
+    }
 
     Widget leftZone = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -572,6 +646,50 @@ class _AdminProductFormScreenState extends State<AdminProductAddScreen> {
             'Añada información detallada del producto...',
           ).copyWith(contentPadding: const EdgeInsets.all(16)),
         ),
+        const SizedBox(height: 24),
+        // --- NUEVA FILA: MARCA Y SKU ---
+        // --- FILA: MARCA Y SKU ---
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLabel('Marca', isRequired: true),
+                  DropdownButtonFormField<int>(
+                    isExpanded: true,
+                    decoration: _customInputDecoration('Seleccione marca'),
+                    value: _selectedBrandId,
+                    // AQUÍ ESTÁ EL CAMBIO: Usamos b.id y b.name directamente del modelo
+                    items: filteredBrands.map((b) => DropdownMenuItem<int>(
+                      value: b.id, 
+                      child: Text(b.name)
+                    )).toList(),
+                    onChanged: (val) => setState(() => _selectedBrandId = val),
+                    validator: (value) => value == null ? 'Obligatorio' : null,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLabel('SKU', isRequired: true),
+                  TextFormField(
+                    controller: _skuController,
+                    validator: (value) => value == null || value.trim().isEmpty ? 'Obligatorio' : null,
+                    decoration: _customInputDecoration('Ej. CPUAMD-001'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        // --- FIN NUEVA FILA ---
         const SizedBox(height: 24),
         Align(
           alignment: Alignment.centerRight,
