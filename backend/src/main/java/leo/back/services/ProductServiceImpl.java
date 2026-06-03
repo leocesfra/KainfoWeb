@@ -50,24 +50,25 @@ public class ProductServiceImpl implements ProductService{
         product.setCategory(dto.getCategory());
         product.setSpecifications(dto.getSpecifications());
 
-        // Guardamos el producto primero para que tenga ID
-        Product savedProduct = productRepository.save(product);
-
-        // Ahora convertimos las URLs (String) a ProductImage (Objetos)
+        // Convertimos las URLs de Flutter a Objetos ProductImage
         if (dto.getGalleryImages() != null && !dto.getGalleryImages().isEmpty()) {
             List<ProductImage> images = new ArrayList<>();
             for (int i = 0; i < dto.getGalleryImages().size(); i++) {
                 ProductImage img = new ProductImage();
                 img.setImageUrl(dto.getGalleryImages().get(i));
-                img.setPrimary(i == 0); // La primera foto es la principal
-                img.setProduct(savedProduct); // Le asignamos el producto recién creado
+                img.setPrimary(i == 0); // La primera (índice 0) es la principal
+
+                // 1. Le decimos a la imagen quién es su padre (el producto)
+                img.setProduct(product);
                 images.add(img);
             }
-            // Guarda las imágenes en su repositorio correspondiente
-            // productImageRepository.saveAll(images);
+            // 2. Le damos la lista de imágenes al padre
+            product.setImages(images);
         }
 
-        return savedProduct;
+        // ¡MAGIA! Un solo save().
+        // Hibernate inserta el producto y luego automáticamente inserta sus imágenes.
+        return productRepository.save(product);
     }
 
     @Override

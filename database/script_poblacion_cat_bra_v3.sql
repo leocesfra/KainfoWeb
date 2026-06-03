@@ -1,0 +1,78 @@
+# POBLACIÓN DATOS PRODUCTOS Y CATEGORÍAS
+
+USE Kainfo;
+
+# CATEGORÍAS
+INSERT IGNORE INTO categories (name, parent_id) VALUES 
+('COMPONENTES', NULL),
+('PERIFÉRICOS', NULL),
+('PORTÁTILES', NULL);
+
+INSERT IGNORE INTO categories (id, name, parent_id) VALUES 
+(11, 'PROCESADORES', 1),
+(12, 'PLACAS BASES', 1),
+(13, 'GRÁFICAS', 1),
+(14, 'RAM', 1),
+(15, 'DSICOS DUROS', 1),
+(16, 'FUENTES DE ALIMENTACIÓN', 1),
+(17, 'CAJAS Y TORRES', 1),
+(18, 'DISIPADRES', 1),
+(19, 'VENTILADORES', 1),
+(20, 'TARJETAS PCI', 1),
+(31, 'MONITORES', 2),
+(32, 'TECLADOS', 2),
+(33, 'RATONES', 2),
+(34, 'AURICULARES', 2),
+(41, 'TODOS LOS PORTATILES', 3);
+
+# MARCAS
+INSERT IGNORE INTO brands (name) VALUES 
+('ACER'),
+('ADATA'),
+('AMD'),
+('AOC'),
+('APPLE'),
+('ARCTIC'),
+('ASROCK'),
+('ASUS'),
+('BE QUIET!'),
+('BENQ'),
+('BIOSTAR'),
+('BITFENIX'),
+('COOLER MASTER'),
+('CORSAIR'),
+('CRUCIAL'),
+('DEEPCOOL'),
+('DELL'),
+('FRACTAL DESIGN'),
+('G.SKILL'),
+('GIGABYTE'),
+('HP'),
+('HYPERX'),
+('INTEL'),
+('KINGSTON'),
+('KIOXIA'),
+('KROM'),
+('LENOVO'),
+('LG'),
+('LIAN LI'),
+('LOGITECH'),
+('MSI'),
+('NOCTUA'),
+('NOX'),
+('NZXT'),
+('PATRIOT'),
+('PNY'),
+('POWERCOLOR'),
+('RED DRAGON'),
+('SAMSUNG'),
+('SANDISK'),
+('SAPPHIRE'),
+('SEAGATE'),
+('SEASONIC'),
+('TEAM GROUP'),
+('THERMALRIGHT'),
+('VALKYRIE'),
+('WESTERN DIGITAL'),
+('XFX'),
+('ZOTAC');

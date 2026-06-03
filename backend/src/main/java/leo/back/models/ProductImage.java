@@ -12,14 +12,14 @@ public class ProductImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     @JsonIgnore
     private Product product;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = false, columnDefinition = "TEXT")
     private String imageUrl;
 
-    @Column(name = "is_primary")
+    @Column(name = "is_primary", nullable = false)
     private boolean isPrimary;
 }
